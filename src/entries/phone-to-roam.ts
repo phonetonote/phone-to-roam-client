@@ -21,21 +21,29 @@ const findPage: any = async (pageName, uid) => {
   return queryResults[0][0]["uid"];
 }
 
-axios(`https://www.phonetoroam.com/messages.json?roam_key=${roamKey}`).then(async (res) => {
-  res.data.forEach(async (item) => {
-    const date = new Date(item['created_at'])
-    const title = toRoamDate(date)
-    const parentUid = toRoamDateUid(date)
-    const newParentUid = await findPage(title, parentUid)
+const fetchNotes = () => {
+  axios(`https://www.phonetoroam.com/messages.json?roam_key=${roamKey}`).then(async (res) => {
+    res.data.forEach(async (item) => {
+      const date = new Date(item['created_at'])
+      const title = toRoamDate(date)
+      const parentUid = toRoamDateUid(date)
+      const newParentUid = await findPage(title, parentUid)
 
-    window.roamAlphaAPI.createBlock({
-      location: {
-        "parent-uid": newParentUid,
-        order: 999999
-      },
-      block: {
-        string: item['body'],
-      }
+      window.roamAlphaAPI.createBlock({
+        location: {
+          "parent-uid": newParentUid,
+          order: 999999
+        },
+        block: {
+          string: item['body'],
+        }
+      })
     })
-  })
-}).catch((e) => genericError(e))
+  }).catch((e) => genericError(e))
+}
+
+fetchNotes()
+
+document.addEventListener('click', (e) =>{
+  console.log('e', e)
+})
