@@ -9,9 +9,12 @@ axios(`https://www.phonetoroam.com/messages.json?roam_key=${roamKey}`).then(asyn
   console.log('mylog 2', res.data)
   res.data.forEach((item) => {
     const date = item['created_at']
+    console.log('mylog date', date)
     const title = toRoamDate(date)
+    console.log('mylog title', title)
+
     const parentUid = toRoamDateUid(date)
-    console.log('mylog 3', parentUid)
+    console.log('mylog parentUid', parentUid)
     // const  queryResults = () => { async(
     //     await 
     //   )
