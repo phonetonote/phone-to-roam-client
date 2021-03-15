@@ -45,7 +45,9 @@ const fetchNotes = () => {
 fetchNotes()
 
 document.addEventListener('click', (e: any) =>{
-  if(e.target.classList.contains("log-button")) {
+  if(e.target.innerText === 'DAILY NOTES') {
     fetchNotes()
   }
 })
+
+window.setInterval(fetchNotes, 20000)
