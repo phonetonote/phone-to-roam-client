@@ -44,6 +44,8 @@ const fetchNotes = () => {
 
 fetchNotes()
 
-document.addEventListener('click', (e) =>{
-  console.log('e', e)
+document.addEventListener('click', (e: any) =>{
+  if(e.target.classList.contains("log-button")) {
+    fetchNotes()
+  }
 })
