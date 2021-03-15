@@ -19,7 +19,7 @@ const findPage: any = async (pageName, uid) => {
       });
       return basicPage.uid;
     }
-    return queryResults[0]["uid"];
+    return queryResults[0][0]["uid"];
 }
 
 axios(`https://www.phonetoroam.com/messages.json?roam_key=${roamKey}`).then(async (res) => {
