@@ -12,6 +12,8 @@ const findPage: any = async (pageName, uid) => {
     const basicPage: any = await window.roamAlphaAPI.createPage({
       page: { title: pageName, uid: uid }
     })
+
+    console.log("mylog basicPage", basicPage)
       
     return basicPage.uid;
   }
