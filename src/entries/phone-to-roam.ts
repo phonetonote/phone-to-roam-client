@@ -35,7 +35,7 @@ const fetchNotes = () => {
           order: 999999
         },
         block: {
-          string: item['body'],
+          string: item['text'],
         }
       })
     })
