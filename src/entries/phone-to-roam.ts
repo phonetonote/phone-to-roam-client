@@ -7,6 +7,7 @@ const client = new WindowClient()
 
 axios(`https://www.phonetoroam.com/messages.json?roam_key=${roamKey}`).then(async (res) => {
   res.data.each((item) => {
+    console.log('logging...', item)
     const parentUid = toRoamDateUid(item['created_at'])
     client.appendBlock({
       text: item['body'],
