@@ -38,6 +38,12 @@ const fetchNotes = () => {
           string: item['text'],
         }
       })
+
+      axios.patch(`https://www.phonetoroam.com/messages/${item.id}.json?roam_key=${roamKey}`, {
+        "status": "published"
+      }).then(async (res) => {
+        console.log('mylog after update', res)
+      })
     })
   }).catch((e) => genericError(e))
 }
