@@ -7,6 +7,8 @@ const findPage: any = async (pageName, uid) => {
    const queryResults = await window.roamAlphaAPI.q(
       `[:find (pull ?e [:block/uid]) :where [?e :node/title "${pageName}"]]`
     );
+
+   console.log('mylog queryResults', queryResults)
     
     if (queryResults.length === 0) {
       const basicPage: any = await window.roamAlphaAPI.createPage({
