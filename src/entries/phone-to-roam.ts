@@ -21,16 +21,15 @@ const findPage: any = async (pageName, uid) => {
 }
 
 axios(`https://www.phonetoroam.com/messages.json?roam_key=${roamKey}`).then(async (res) => {
+  
   console.log('mylog 1', res)
   console.log('mylog 2', res.data)
-  res.data.forEach((item) => {
+  res.data.forEach(async (item) => {
     const date = new Date(item['created_at'])
     const title = toRoamDate(date)
     const parentUid = toRoamDateUid(date)
+    const newParentUid = await findPage(title, parentUid)
 
-
-    const newParentUid = findPage(title, parentUid)
-    
     console.log('mylog parentUid', parentUid)
     console.log('mylog newParentUid', newParentUid)
     // window.roamAlphaAPI.createBlock({
