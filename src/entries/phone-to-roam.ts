@@ -4,7 +4,7 @@ import { formatRFC3339, startOfDay, endOfDay } from "date-fns";
 
 const roamKey = document.getElementById('phone-to-roam-script')?.dataset.roam_key
 const findPage: any = async (pageName, uid) => { 
-  const queryResults = await window.roamAlphaAPI.q(
+  let queryResults = await window.roamAlphaAPI.q(
     `[:find (pull ?e [:block/uid]) :where [?e :node/title "${pageName}"]]`
   )
     
@@ -13,9 +13,9 @@ const findPage: any = async (pageName, uid) => {
       page: { title: pageName, uid: uid }
     })
 
-    console.log("mylog basicPage", basicPage)
-      
-    return basicPage.uid;
+    queryResults = await window.roamAlphaAPI.q(
+      `[:find (pull ?e [:block/uid]) :where [?e :node/title "${pageName}"]]`
+    )      
   }
     
   return queryResults[0][0]["uid"];
