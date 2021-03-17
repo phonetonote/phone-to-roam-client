@@ -53,10 +53,17 @@ const fetchNotes = () => {
       const newParentUid = await findPage(title, parentUid)
       const children: TextNode[] = []
 
+
       if(item.attachments.length === 1) {
         const attachment = item.attachments[0];
-        const keys = ['title', 'description', 'site_name', 'content_type']
+        if(attachment['image_url'].length > 0) {
+          children.push({
+            text: `![](${attachment['image_url']})`,
+            children: []
+          })
+        }
 
+        const keys = ['title', 'description', 'site_name', 'content_type']
         keys.forEach((k) => {
           const v = attachment[k]
           if(v.length > 0) {
@@ -66,6 +73,7 @@ const fetchNotes = () => {
             })
           }
         })
+
       }
 
       createBlock({
@@ -76,7 +84,7 @@ const fetchNotes = () => {
         parentUid: newParentUid,
         order: 999999  
       })
-      
+
 
       axios.patch(`https://www.phonetoroam.com/messages/${item.id}.json?roam_key=${roamKey}`, {
         "status": "published"
