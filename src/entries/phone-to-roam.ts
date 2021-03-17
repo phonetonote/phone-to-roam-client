@@ -1,6 +1,7 @@
 import { toRoamDate, toRoamDateUid, genericError, pushBullets, WindowClient } from 'roam-client'
 import axios from "axios";
 import { formatRFC3339, startOfDay, endOfDay } from "date-fns";
+import { TextNode } from "roam-client";
 
 const roamKey = document.getElementById('phone-to-roam-script')?.dataset.roam_key
 const findPage: any = async (pageName, uid) => { 
@@ -21,6 +22,27 @@ const findPage: any = async (pageName, uid) => {
   return queryResults[0][0]["uid"];
 }
 
+const createBlock = ({
+  node,
+  parentUid,
+  order,
+}: {
+  node: TextNode;
+  parentUid: string;
+  order: number;
+}) => {
+  const uid = window.roamAlphaAPI.util.generateUID();
+  window.roamAlphaAPI.createBlock({
+    location: { "parent-uid": parentUid, order },
+    block: { uid, string: node.text },
+  });
+  node.children.forEach((n, o) =>
+    createBlock({ node: n, parentUid: uid, order: o })
+  );
+  return uid;
+};
+
+
 const fetchNotes = () => {
   axios(`https://www.phonetoroam.com/messages.json?roam_key=${roamKey}`).then(async (res) => {
     res.data.forEach(async (item) => {
@@ -29,15 +51,30 @@ const fetchNotes = () => {
       const title = toRoamDate(date)
       const parentUid = toRoamDateUid(date)
       const newParentUid = await findPage(title, parentUid)
+      const children: TextNode[] = []
 
-      window.roamAlphaAPI.createBlock({
-        location: {
-          "parent-uid": newParentUid,
-          order: 999999
+      if(item.attachments.length === 1) {
+        const attachment = item.attachments[0];
+        const keys = ['title', 'description', 'site_name', 'content_type']
+
+        keys.forEach((k) => {
+          const v = attachment[k]
+          if(v.length > 0) {
+            children.push({
+              text: `${k.replaceAll("_", " ")}:: ${v}`,
+              children: []
+            })
+          }
+        })
+      }
+
+      createBlock({
+        node: {
+          text: item['text'], 
+          children: children
         },
-        block: {
-          string: item['text'],
-        }
+        parentUid: newParentUid,
+        order: 999999  
       })
 
       axios.patch(`https://www.phonetoroam.com/messages/${item.id}.json?roam_key=${roamKey}`, {
