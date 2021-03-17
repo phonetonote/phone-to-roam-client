@@ -46,13 +46,11 @@ const createBlock = ({
 const fetchNotes = () => {
   axios(`https://www.phonetoroam.com/messages.json?roam_key=${roamKey}`).then(async (res) => {
     res.data.forEach(async (item) => {
-      console.log('mylog item', item)
       const date = new Date(item['created_at'])
       const title = toRoamDate(date)
       const parentUid = toRoamDateUid(date)
       const newParentUid = await findPage(title, parentUid)
       const children: TextNode[] = []
-
 
       if(item.attachments.length === 1) {
         const attachment = item.attachments[0];
@@ -84,7 +82,6 @@ const fetchNotes = () => {
         parentUid: newParentUid,
         order: 999999  
       })
-
 
       axios.patch(`https://www.phonetoroam.com/messages/${item.id}.json?roam_key=${roamKey}`, {
         "status": "published"
