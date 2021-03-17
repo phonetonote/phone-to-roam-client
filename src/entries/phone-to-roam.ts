@@ -76,6 +76,7 @@ const fetchNotes = () => {
         parentUid: newParentUid,
         order: 999999  
       })
+      
 
       axios.patch(`https://www.phonetoroam.com/messages/${item.id}.json?roam_key=${roamKey}`, {
         "status": "published"
