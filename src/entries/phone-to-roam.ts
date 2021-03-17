@@ -24,6 +24,7 @@ const findPage: any = async (pageName, uid) => {
 const fetchNotes = () => {
   axios(`https://www.phonetoroam.com/messages.json?roam_key=${roamKey}`).then(async (res) => {
     res.data.forEach(async (item) => {
+      console.log('mylog item', item)
       const date = new Date(item['created_at'])
       const title = toRoamDate(date)
       const parentUid = toRoamDateUid(date)
