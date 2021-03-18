@@ -66,7 +66,7 @@ const fetchNotes = () => {
           const v = attachment[k]
           if(v.length > 0) {
             children.push({
-              text: `${k.replaceAll("_", " ")}:: ${v}`,
+              text: `${k.replaceAll("_", " ")}:: ${v.trim()}`,
               children: []
             })
           }
@@ -76,7 +76,7 @@ const fetchNotes = () => {
 
       createBlock({
         node: {
-          text: item['text'], 
+          text: item['text'].toString().trim(), 
           children: children
         },
         parentUid: newParentUid,
