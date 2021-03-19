@@ -89,7 +89,7 @@ const fetchNotes = () => {
 
       })
     })
-  }).catch((e) => genericError(e))
+  }).catch((e) => console.log('phonetoroam error', e))
 }
 
 fetchNotes()
