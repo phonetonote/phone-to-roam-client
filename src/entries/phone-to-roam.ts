@@ -43,9 +43,11 @@ export const nodeMaker = (message) => {
   return { text: text.trim(), children: children }
 }
 
+const serverUrl = () => process.env['PTR_SERVER'] || 'https://www.phonetoroam.com'
+
 
 const fetchNotes = () => {
-  axios(`https://www.phonetoroam.com/messages.json?roam_key=${roamKey}`).then(async (res) => {
+  axios(`${serverUrl()}/messages.json?roam_key=${roamKey}`).then(async (res) => {
     res.data.forEach(async (message) => {
       const node = nodeMaker(message)
       const date = new Date(message['created_at'])
@@ -59,7 +61,7 @@ const fetchNotes = () => {
         order: 999999  
       })
 
-      axios.patch(`https://www.phonetoroam.com/messages/${message.id}.json?roam_key=${roamKey}`, {
+      axios.patch(`${serverUrl()}/messages/${message.id}.json?roam_key=${roamKey}`, {
         "status": "published"
       })
     })
