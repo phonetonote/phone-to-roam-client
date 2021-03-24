@@ -16,7 +16,7 @@ export const nodeMaker = (message) => {
   let text = message['body']
 
   if(attachment?.media_type === 'link') {
-    if(attachment['image_url'].length > 0) {
+    if(attachment.image_url && attachment.image_url.length > 0) {
       children.push({
         text: `![](${attachment['image_url']})`,
         children: []
