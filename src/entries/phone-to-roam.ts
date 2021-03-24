@@ -7,7 +7,7 @@ import { findPage, createBlock } from "../entry-helpers";
 const roamKey = document.getElementById('phone-to-roam-script')?.dataset.roam_key
 
 const LINK_KEYS = ['title', 'description', 'site_name', 'content_type']
-const SERVER_URL = 'https://www.phonetoroam.com'
+const SERVER_URL = 'https://next--phonetoroam.netlify.app'
 
 export const nodeMaker = (message) => {
   const children: TextNode[] = []
