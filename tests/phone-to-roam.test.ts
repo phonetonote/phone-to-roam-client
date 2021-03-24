@@ -2,14 +2,14 @@ import { nodeMaker } from "../src/entries/phone-to-roam"
 
 const mediaUrl = "http://example.com/s3-bucket/file.jpg"
 
-test("trims the text", () => {
+test("trims the text and adds the tag", () => {
   const message = {
     attachments: [],
     body: ' foo   '
   }
 
   const node = nodeMaker(message)
-  expect(node.text).toEqual('foo');
+  expect(node.text).toEqual('foo #phonetoroam');
   expect(node.children).toEqual([])
 });
 
@@ -20,7 +20,7 @@ test("renders image attachments in the body", () => {
   }
 
   const node = nodeMaker(message)
-  expect(node.text).toEqual(`![](${mediaUrl})`);
+  expect(node.text).toEqual(`![](${mediaUrl}) #phonetoroam`);
   expect(node.children).toEqual([])
 })
 
@@ -31,7 +31,7 @@ test("links to audio with a default link title", () => {
   }
 
   const node = nodeMaker(message)
-  expect(node.text).toEqual(`[Audio Recording](${mediaUrl})`);
+  expect(node.text).toEqual(`[Audio Recording](${mediaUrl}) #phonetoroam`);
   expect(node.children).toEqual([])
 })
 

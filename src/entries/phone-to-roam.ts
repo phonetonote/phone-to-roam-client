@@ -42,7 +42,7 @@ export const nodeMaker = (message) => {
     text = `[${title}](${attachment.url})`
   }
 
-  return { text: text.trim(), children: children }
+  return { text: `${text.trim()} #phonetoroam`, children: children }
 }
 
 const fetchNotes = () => {
