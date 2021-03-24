@@ -2,91 +2,65 @@ import { toRoamDate, toRoamDateUid, genericError, pushBullets, WindowClient } fr
 import axios from "axios";
 import { formatRFC3339, startOfDay, endOfDay } from "date-fns";
 import { TextNode } from "roam-client";
+import { findPage, createBlock } from "../entry-helpers";
 
 const roamKey = document.getElementById('phone-to-roam-script')?.dataset.roam_key
-const findPage: any = async (pageName, uid) => { 
-  let queryResults = await window.roamAlphaAPI.q(
-    `[:find (pull ?e [:block/uid]) :where [?e :node/title "${pageName}"]]`
-  )
-    
-  if (queryResults.length === 0) {
-    const basicPage: any = await window.roamAlphaAPI.createPage({
-      page: { title: pageName, uid: uid }
+
+const LINK_KEYS = ['title', 'description', 'site_name', 'content_type']
+export const nodeMaker = (message) => {
+  const children: TextNode[] = []
+
+  const attachment = message?.attachments[0]
+  let text = message['body']
+
+  if(attachment?.media_type === 'link') {
+    if(attachment['image_url'].length > 0) {
+      children.push({
+        text: `![](${attachment['image_url']})`,
+        children: []
+      })
+    }
+
+    LINK_KEYS.forEach((k) => {
+      const v = attachment[k]
+      if(v?.length > 0) {
+        children.push({
+          text: `${k.replace(/_/g, ' ')}:: ${v.trim()}`,
+          children: []
+        })
+      }
     })
 
-    queryResults = await window.roamAlphaAPI.q(
-      `[:find (pull ?e [:block/uid]) :where [?e :node/title "${pageName}"]]`
-    )      
+  // get a branch to a url and install that locally
+  } else if (attachment?.media_type === 'image') {
+    text = `![](${attachment.url})`
+  } else if (attachment?.media_type === 'audio') {
+    const title = message.body?.trim()?.length > 0 ? message.body : 'Audio Recording' 
+    text = `[${title}](${attachment.url})`
   }
-    
-  return queryResults[0][0]["uid"];
-}
+  //figure out how to mock axios request to test this? maybe separate the biz logic out
 
-const createBlock = ({
-  node,
-  parentUid,
-  order,
-}: {
-  node: TextNode;
-  parentUid: string;
-  order: number;
-}) => {
-  const uid = window.roamAlphaAPI.util.generateUID();
-  window.roamAlphaAPI.createBlock({
-    location: { "parent-uid": parentUid, order },
-    block: { uid, string: node.text },
-  });
-  node.children.forEach((n, o) =>
-    createBlock({ node: n, parentUid: uid, order: o })
-  );
-  return uid;
-};
+  return { text: text.trim(), children: children }
+}
 
 
 const fetchNotes = () => {
   axios(`https://www.phonetoroam.com/messages.json?roam_key=${roamKey}`).then(async (res) => {
-    res.data.forEach(async (item) => {
-      const date = new Date(item['created_at'])
+    res.data.forEach(async (message) => {
+      const node = nodeMaker(message)
+      const date = new Date(message['created_at'])
       const title = toRoamDate(date)
       const parentUid = toRoamDateUid(date)
       const newParentUid = await findPage(title, parentUid)
-      const children: TextNode[] = []
-
-      if(item.attachments.length === 1) {
-        const attachment = item.attachments[0];
-        if(attachment['image_url'].length > 0) {
-          children.push({
-            text: `![](${attachment['image_url']})`,
-            children: []
-          })
-        }
-
-        const keys = ['title', 'description', 'site_name', 'content_type']
-        keys.forEach((k) => {
-          const v = attachment[k]
-          if(v.length > 0) {
-            children.push({
-              text: `${k.replaceAll("_", " ")}:: ${v.trim()}`,
-              children: []
-            })
-          }
-        })
-
-      }
 
       createBlock({
-        node: {
-          text: item['text'].toString().trim(), 
-          children: children
-        },
+        node: node,
         parentUid: newParentUid,
         order: 999999  
       })
 
-      axios.patch(`https://www.phonetoroam.com/messages/${item.id}.json?roam_key=${roamKey}`, {
+      axios.patch(`https://www.phonetoroam.com/messages/${message.id}.json?roam_key=${roamKey}`, {
         "status": "published"
-      }).then(async (res) => {
-
       })
     })
   }).catch((e) => console.log('phonetoroam error', e))
