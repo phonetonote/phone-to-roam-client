@@ -7,6 +7,8 @@ import { findPage, createBlock } from "../entry-helpers";
 const roamKey = document.getElementById('phone-to-roam-script')?.dataset.roam_key
 
 const LINK_KEYS = ['title', 'description', 'site_name', 'content_type']
+const SERVER_URL = 'http://phonetoroam.ngrok.io'
+
 export const nodeMaker = (message) => {
   const children: TextNode[] = []
 
@@ -43,11 +45,8 @@ export const nodeMaker = (message) => {
   return { text: text.trim(), children: children }
 }
 
-const serverUrl = () => process.env['PTR_SERVER'] || 'https://www.phonetoroam.com'
-
-
 const fetchNotes = () => {
-  axios(`${serverUrl()}/messages.json?roam_key=${roamKey}`).then(async (res) => {
+  axios(`${SERVER_URL}/messages.json?roam_key=${roamKey}`).then(async (res) => {
     res.data.forEach(async (message) => {
       const node = nodeMaker(message)
       const date = new Date(message['created_at'])
@@ -61,7 +60,7 @@ const fetchNotes = () => {
         order: 999999  
       })
 
-      axios.patch(`${serverUrl()}/messages/${message.id}.json?roam_key=${roamKey}`, {
+      axios.patch(`${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`, {
         "status": "published"
       })
     })
