@@ -54,6 +54,8 @@ const fetchNotes = () => {
       const parentUid = toRoamDateUid(date)
       const newParentUid = await findPage(title, parentUid)
 
+      debugger
+      
       createBlock({
         node: node,
         parentUid: newParentUid,
