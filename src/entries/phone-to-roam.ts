@@ -55,11 +55,12 @@ const fetchNotes = () => {
       const newParentUid = await findPage(title, parentUid)
 
       console.log("mylog", node, date, title, parentUid, newParentUid)
-      
+      const childrenQuery = window.roamAlphaAPI.q(`[ :find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${title}"]]`)
+      const order = childrenQuery ? childrenQuery[0][0].children.length : 0
       createBlock({
-        node: node,
+        node,
         parentUid: newParentUid,
-        order: 999999  
+        order
       })
 
       axios.patch(`${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`, {
