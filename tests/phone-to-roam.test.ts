@@ -1,4 +1,4 @@
-import { nodeMaker } from "../src/entries/phone-to-roam"
+import { nodeMaker } from "../src/entry-helpers"
 
 const mediaUrl = "http://example.com/s3-bucket/file.jpg"
 
