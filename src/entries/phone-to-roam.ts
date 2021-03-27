@@ -46,8 +46,6 @@ export const nodeMaker = (message) => {
 }
 
 const fetchNotes = () => {
-  Bugsnag.notify(new Error('Test error'))
-
   axios(`${SERVER_URL}/messages.json?roam_key=${roamKey}`).then(async (res) => {
     res.data.forEach(async (message) => {
       const node = nodeMaker(message)
