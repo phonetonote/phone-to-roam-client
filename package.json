@@ -20,6 +20,7 @@
   "devDependencies": {},
   "dependencies": {
     "@analytics/segment": "^0.6.1",
+    "@bugsnag/js": "^7.9.0",
     "@geist-ui/react": "^2.1.0-canary.2",
     "@testing-library/dom": "^7.22.6",
     "@testing-library/jest-dom": "^5.11.4",

@@ -3,6 +3,8 @@ import axios from "axios";
 import { formatRFC3339, startOfDay, endOfDay } from "date-fns";
 import { TextNode } from "roam-client";
 import { findPage, createBlock } from "../entry-helpers";
+import Bugsnag from '@bugsnag/js'
+Bugsnag.start({ apiKey: '0ca67498b27bd9e3fba038f7fb0cd0b4' })
 
 const roamKey = document.getElementById('phone-to-roam-script')?.dataset.roam_key
 
@@ -33,19 +35,19 @@ export const nodeMaker = (message) => {
       }
     })
 
-  // get a branch to a url and install that locally
   } else if (attachment?.media_type === 'image') {
     text = `![](${attachment.url})`
   } else if (attachment?.media_type === 'audio') {
     const title = message.body?.trim()?.length > 0 ? message.body : 'Audio Recording' 
     text = `[${title}](${attachment.url})`
   }
-  //figure out how to mock axios request to test this? maybe separate the biz logic out
 
   return { text: text.trim(), children: children }
 }
 
 const fetchNotes = () => {
+  Bugsnag.notify(new Error('Test error'))
+
   axios(`${SERVER_URL}/messages.json?roam_key=${roamKey}`).then(async (res) => {
     res.data.forEach(async (message) => {
       const node = nodeMaker(message)
