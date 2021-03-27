@@ -9,7 +9,7 @@ Bugsnag.start({ apiKey: '0ca67498b27bd9e3fba038f7fb0cd0b4' })
 const roamKey = document.getElementById('phone-to-roam-script')?.dataset.roam_key
 
 const LINK_KEYS = ['title', 'description', 'site_name', 'content_type']
-const SERVER_URL = 'https://www.phonetoroam.com'
+const SERVER_URL = 'https://phonetoroam.ngrok.io'
 
 export const nodeMaker = (message) => {
   const children: TextNode[] = []
