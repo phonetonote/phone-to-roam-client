@@ -33,7 +33,13 @@ export const nodeMaker = (message) => {
     text = `[${title}](${attachment.url})`
   }
 
-  return { text: `${text.trim()} #phonetoroam`, children: children }
+  text = `${text.trim()} #phonetoroam`
+
+  if(message?.sender_type === 'facebook') {
+    text += ' #facebooktoroam'
+  }
+
+  return { text: `${text}`, children: children }
 }
 
 export const findPage: any = async (pageName, uid) => { 

@@ -13,6 +13,18 @@ test("trims the text and adds the tag", () => {
   expect(node.children).toEqual([])
 });
 
+test("adds an extra tag for facebook", () => {
+  const message = {
+    attachments: [],
+    body: ' foo   ',
+    sender_type: 'facebook'
+  }
+
+  const node = nodeMaker(message)
+  expect(node.text).toEqual('foo #phonetoroam #facebooktoroam');
+  expect(node.children).toEqual([])
+});
+
 test("renders image attachments in the body", () => {
   const message = {
     attachments: [{media_type: 'image', url: mediaUrl}],
