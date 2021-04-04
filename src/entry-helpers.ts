@@ -56,8 +56,6 @@ export const findPage: any = async (pageName, uid) => {
       `[:find (pull ?e [:block/uid]) :where [?e :node/title "${pageName}"]]`
     )      
   }
-
-  console.log('ptr queryResults', queryResults)
     
   return queryResults[0][0]["uid"];
 }
