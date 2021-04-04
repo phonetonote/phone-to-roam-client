@@ -5,7 +5,8 @@ const mediaUrl = "http://example.com/s3-bucket/file.jpg"
 test("trims the text and adds the tag", () => {
   const message = {
     attachments: [],
-    body: ' foo   '
+    body: ' foo   ',
+    text: ' foo   '
   }
 
   const node = nodeMaker(message)
@@ -17,6 +18,7 @@ test("adds an extra tag for facebook", () => {
   const message = {
     attachments: [],
     body: ' foo   ',
+    text: ' foo   ',
     sender_type: 'facebook'
   }
 
@@ -28,7 +30,8 @@ test("adds an extra tag for facebook", () => {
 test("renders image attachments in the body", () => {
   const message = {
     attachments: [{media_type: 'image', url: mediaUrl}],
-    body: ''
+    body: '',
+    text: null,
   }
 
   const node = nodeMaker(message)
@@ -39,7 +42,8 @@ test("renders image attachments in the body", () => {
 test("links to audio with a default link title", () => {
   const message = {
     attachments: [{media_type: 'audio', url: mediaUrl}],
-    body: '  '
+    body: '  ',
+    text: '  '
   }
 
   const node = nodeMaker(message)
@@ -58,7 +62,8 @@ test("inserts link metadata as children", () =>{
         image_url: mediaUrl
       }
     ],
-    body: 'a link'
+    body: 'a link',
+    text: 'a link'
   }
 
   const node = nodeMaker(message)

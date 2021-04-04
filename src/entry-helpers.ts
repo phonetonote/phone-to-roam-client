@@ -6,7 +6,7 @@ export const nodeMaker = (message) => {
   const children: TextNode[] = []
 
   const attachment = message?.attachments[0]
-  let text = message['body']
+  let text = message['text']
 
   if(attachment?.media_type === 'link') {
     if(attachment.image_url && attachment.image_url.length > 0) {
