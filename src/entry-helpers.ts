@@ -37,6 +37,8 @@ export const nodeMaker = (message) => {
 
   if(message?.sender_type === 'facebook') {
     text += ' #facebooktoroam'
+  } else if (message?.sender_type === 'alfred') {
+    text += ' #alfredtoroam'
   }
 
   return { text: `${text}`, children: children }
