@@ -1,12 +1,8 @@
 import { toRoamDate, toRoamDateUid, genericError, pushBullets, WindowClient } from 'roam-client'
 import axios from "axios";
 import { formatRFC3339, startOfDay, endOfDay } from "date-fns";
-import { findPage, createBlock, nodeMaker } from "../entry-helpers";
+import { findPage, createBlock, nodeMaker, configure } from "../entry-helpers";
 import Bugsnag from '@bugsnag/js'
-import { createConfigObserver } from "roamjs-components";
-
-const ID = "ptr";
-const CONFIG = `roam/js/${ID}`;
 
 // #TODO this should change based off some netlify env variable
 const SERVER_URL = 'https://phonetoroam.ngrok.io'
@@ -40,33 +36,6 @@ const fetchNotes = () => {
     console.log('phonetoroam error', e)
     Bugsnag.notify(e)
   })
-}
-
-const configure = () => {
-  createConfigObserver({
-    title: CONFIG,
-    config: {
-      tabs: [
-        {
-          id: "home",
-          fields: [
-            {
-              type: "text",
-              title: "hashtag",
-              description: "if you want  #hashtag at the end of each phonetoroam note, put what you want that hashtag to be here. if you do not want a hashtag, make this blank.",
-              defaultValue: "#phonetoroam"
-            },            
-            {
-              type: "text",
-              title: "parent block title",
-              description: "if you want your phonetoroam notes nested under a block, give that block a name here. if you do not want them nested under anything, leave this blank.",
-              defaultValue: "phonetoroam notes"
-            },
-          ],
-        },
-      ],
-    },
-  });
 }
 
 fetchNotes()

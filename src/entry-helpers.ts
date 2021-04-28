@@ -1,6 +1,60 @@
-import { TextNode } from "roam-client";
+import { TextNode, TreeNode, getTreeByPageName } from "roam-client";
+import { createConfigObserver } from "roamjs-components";
 
 const LINK_KEYS = ['title', 'description', 'site_name', 'content_type']
+
+const ID = "ptr";
+const CONFIG = `roam/js/${ID}`;
+const DEFAULT_HASHTAG = "phonetoroam"
+
+const toFlexRegex = (key: string): RegExp => new RegExp(`^\\s*${key}\\s*$`, "i");
+const getSettingValueFromTree = ({
+  tree,
+  key,
+  defaultValue = "",
+}: {
+  tree: TreeNode[];
+  key: string;
+  defaultValue?: string;
+}): string => {
+  const node = tree.find((s) => toFlexRegex(key).test(s.text.trim()));
+  const value = node ? node.children[0].text.trim() : defaultValue;
+  return value;
+};
+
+const configTree = () => getTreeByPageName(CONFIG)
+const hashtagFromConfig =  getSettingValueFromTree({
+  key: "hashtag",
+  defaultValue: DEFAULT_HASHTAG,
+  tree: configTree(),
+})
+
+export const configure = () => {
+  createConfigObserver({
+    title: CONFIG,
+    config: {
+      tabs: [
+        {
+          id: "home",
+          fields: [
+            {
+              type: "text",
+              title: "hashtag",
+              description: "if you want  #hashtag at the end of each phonetoroam note, put what you want that hashtag to be here. if you do not want a hashtag, make this blank.",
+              defaultValue: DEFAULT_HASHTAG
+            },            
+            {
+              type: "text",
+              title: "parent block title",
+              description: "if you want your phonetoroam notes nested under a block, give that block a name here. if you do not want them nested under anything, leave this blank.",
+              defaultValue: "phonetoroam notes"
+            },
+          ],
+        },
+      ],
+    },
+  });
+}
 
 export const nodeMaker = (message) => {
   const children: TextNode[] = []
@@ -33,7 +87,7 @@ export const nodeMaker = (message) => {
     text = `[${title}](${attachment.url})`
   }
 
-  text = `${text.trim()} #phonetoroam`
+  text = `${text.trim()} #${hashtagFromConfig}`
 
   if(message?.sender_type === 'facebook') {
     text += ' #facebooktoroam'
