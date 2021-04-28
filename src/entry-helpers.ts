@@ -1,6 +1,68 @@
-import { TextNode } from "roam-client";
+import { TextNode, TreeNode, getTreeByPageName } from "roam-client";
+import { createConfigObserver } from "roamjs-components";
 
 const LINK_KEYS = ['title', 'description', 'site_name', 'content_type']
+
+const ID = "ptr";
+const CONFIG = `roam/js/${ID}`;
+const DEFAULT_HASHTAG = "phonetoroam"
+
+const toFlexRegex = (key: string): RegExp => new RegExp(`^\\s*${key}\\s*$`, "i");
+const getSettingValueFromTree = ({
+  tree,
+  key,
+  defaultValue = "",
+}: {
+  tree: TreeNode[];
+  key: string;
+  defaultValue?: string;
+}): string => {
+  const node = tree.find((s) => toFlexRegex(key).test(s.text.trim()));
+  const value = node ? node.children[0].text.trim() : defaultValue;
+  return value;
+};
+
+const configTree = () => { return getTreeByPageName(CONFIG) }
+const hashtagFromConfig = () => {
+  let hashtag = getSettingValueFromTree({
+    key: "hashtag",
+    defaultValue: DEFAULT_HASHTAG,
+    tree: configTree(),
+  })
+
+  if(hashtag.indexOf('#') === 0) {
+    hashtag = hashtag.substring(1)
+  }
+
+  return hashtag
+} 
+
+export const configure = () => {
+  createConfigObserver({
+    title: CONFIG,
+    config: {
+      tabs: [
+        {
+          id: "home",
+          fields: [
+            {
+              type: "text",
+              title: "hashtag",
+              description: "if you want  #hashtag at the end of each phonetoroam note, put what you want that hashtag to be here. if you do not want a hashtag, make this blank.",
+              defaultValue: DEFAULT_HASHTAG
+            },            
+            {
+              type: "text",
+              title: "parent block title",
+              description: "if you want your phonetoroam notes nested under a block, give that block a name here. if you do not want them nested under anything, leave this blank.",
+              defaultValue: "phonetoroam notes"
+            },
+          ],
+        },
+      ],
+    },
+  });
+}
 
 export const nodeMaker = (message) => {
   const children: TextNode[] = []
@@ -33,7 +95,7 @@ export const nodeMaker = (message) => {
     text = `[${title}](${attachment.url})`
   }
 
-  text = `${text.trim()} #phonetoroam`
+  text = `${text.trim()} #${hashtagFromConfig()}`
 
   if(message?.sender_type === 'facebook') {
     text += ' #facebooktoroam'
@@ -46,9 +108,9 @@ export const nodeMaker = (message) => {
   return { text: `${text}`, children: children }
 }
 
-export const findPage: any = async (pageName, uid) => { 
+export const findParentUid: any = async (pageName, uid) => { 
   let queryResults = await window.roamAlphaAPI.q(
-    `[:find (pull ?e [:block/uid]) :where [?e :node/title "${pageName}"]]`
+    `[:find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${pageName}"]]`
   )
     
   if (queryResults.length === 0) {
@@ -57,11 +119,28 @@ export const findPage: any = async (pageName, uid) => {
     })
 
     queryResults = await window.roamAlphaAPI.q(
-      `[:find (pull ?e [:block/uid]) :where [?e :node/title "${pageName}"]]`
+      `[:find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${pageName}"]]`
     )      
   }
-    
-  return queryResults[0][0]["uid"];
+
+  let parentBlock = getSettingValueFromTree({
+    key: "parent block title",
+    tree: configTree(),
+  })
+
+  if(parentBlock && typeof(parentBlock) === 'string' && parentBlock.length > 0) {
+    const children = queryResults[0][0]['children']
+    const potentialParentBlock = children.filter((item) => item['string'] === parentBlock)
+    if(potentialParentBlock.length > 0) {
+      return potentialParentBlock[0]['uid']
+    } else {
+      const node = { text: parentBlock, children: []}
+      return createBlock({ node, parentUid: queryResults[0][0]['uid'], order: children.length})
+    }
+
+  } else {
+    return queryResults[0][0]["uid"]
+  }
 }
 
 export const createBlock = ({

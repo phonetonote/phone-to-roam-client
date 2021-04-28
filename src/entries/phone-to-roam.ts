@@ -1,10 +1,11 @@
 import { toRoamDate, toRoamDateUid, genericError, pushBullets, WindowClient } from 'roam-client'
 import axios from "axios";
 import { formatRFC3339, startOfDay, endOfDay } from "date-fns";
-import { findPage, createBlock, nodeMaker } from "../entry-helpers";
+import { findParentUid, createBlock, nodeMaker, configure } from "../entry-helpers";
 import Bugsnag from '@bugsnag/js'
 
-const SERVER_URL = 'https://www.phonetoroam.com'
+// #TODO this should change based off some netlify env variable
+const SERVER_URL = 'https://phonetoroam.ngrok.io'
 const roamKey = document.getElementById('phone-to-roam-script')?.dataset.roam_key
 
 Bugsnag.start({ apiKey: '0ca67498b27bd9e3fba038f7fb0cd0b4' })
@@ -18,11 +19,14 @@ const fetchNotes = () => {
       const date = new Date(message['created_at'])
       const title = toRoamDate(date)
       const oldParentId = toRoamDateUid(date)
-      const parentUid = await findPage(title, oldParentId)
-      const childrenQuery = window.roamAlphaAPI.q(`[ :find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${title}"]]`)
-      console.log('ptr logging', [i, childrenQuery, order])
+      const parentUid = await findParentUid(title, oldParentId)
+      const childrenQuery = window.roamAlphaAPI.q(`[ :find (pull ?e [* {:block/children [*]}]) :where [?e :block/uid "${parentUid}"]]`)
+
+      console.log('ptr log parentUid', parentUid)
+      console.log('ptr log childrenQuery', childrenQuery)
+
       if(i === 0) {
-        order = childrenQuery ? (childrenQuery[0][0]?.children?.length || 0) : 0
+        order = (childrenQuery && childrenQuery[0] && childrenQuery[0][0]) ? (childrenQuery[0][0]?.children?.length || 0) : 0
       } else {
         order = order + 1
       }
@@ -37,6 +41,7 @@ const fetchNotes = () => {
   })
 }
 
+configure()
 fetchNotes()
 
 document.addEventListener('click', (e: any) =>{
