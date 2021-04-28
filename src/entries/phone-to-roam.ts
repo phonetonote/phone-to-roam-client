@@ -8,7 +8,8 @@ import { createConfigObserver } from "roamjs-components";
 const ID = "ptr";
 const CONFIG = `roam/js/${ID}`;
 
-const SERVER_URL = 'https://www.phonetoroam.com'
+// #TODO this should change based off some netlify env variable
+const SERVER_URL = 'https://phonetoroam.ngrok.io'
 const roamKey = document.getElementById('phone-to-roam-script')?.dataset.roam_key
 
 Bugsnag.start({ apiKey: '0ca67498b27bd9e3fba038f7fb0cd0b4' })
