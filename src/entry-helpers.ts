@@ -23,6 +23,7 @@ const getSettingValueFromTree = ({
 };
 
 const configTree = () => getTreeByPageName(CONFIG)
+console.log('configTree', configTree)
 const hashtagFromConfig =  getSettingValueFromTree({
   key: "hashtag",
   defaultValue: DEFAULT_HASHTAG,
