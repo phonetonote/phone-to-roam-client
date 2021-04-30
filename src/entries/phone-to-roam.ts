@@ -26,7 +26,7 @@ const fetchNotes = () => {
       console.log('ptr log childrenQuery', childrenQuery)
 
       if(i === 0) {
-        order = childrenQuery ? (childrenQuery[0][0]?.children?.length || 0) : 0
+        order = (childrenQuery && childrenQuery[0] && childrenQuery[0][0]) ? (childrenQuery[0][0]?.children?.length || 0) : 0
       } else {
         order = order + 1
       }
