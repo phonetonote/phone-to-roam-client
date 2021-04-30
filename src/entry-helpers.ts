@@ -24,19 +24,19 @@ const getSettingValueFromTree = ({
 
 const configTree = () => { return getTreeByPageName(CONFIG) }
 const hashtagFromConfig = () => {
-  console.log('ptr logging configTree()', configTree())
+  console.error('ptr logging configTree()', configTree())
   const hashtag = getSettingValueFromTree({
     key: "hashtag",
     defaultValue: DEFAULT_HASHTAG,
     tree: configTree(),
   })
 
-  console.log('ptr logging hashtag', hashtag)
+  console.error('ptr logging hashtag', hashtag)
   return hashtag
 } 
 
 export const configure = () => {
-  console.log('ptr logging configure')
+  console.error('ptr logging configure')
   createConfigObserver({
     title: CONFIG,
     config: {
@@ -64,7 +64,7 @@ export const configure = () => {
 }
 
 export const nodeMaker = (message) => {
-  console.log('ptr logging nodeMaker')
+  console.error('ptr logging nodeMaker')
   const children: TextNode[] = []
 
   const attachment = message?.attachments[0]
@@ -96,7 +96,7 @@ export const nodeMaker = (message) => {
   }
 
   text = `${text.trim()} #${hashtagFromConfig()}`
-  console.log('ptr logging text', text)
+  console.error('ptr logging text', text)
 
   if(message?.sender_type === 'facebook') {
     text += ' #facebooktoroam'
