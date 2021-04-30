@@ -25,10 +25,9 @@ const getSettingValueFromTree = ({
 const configTree = () => { return getTreeByPageName(CONFIG) }
 const hashtagFromConfig = () => {
   console.log('ptr logging configTree()', configTree())
-  debugger
   const hashtag = getSettingValueFromTree({
     key: "hashtag",
-    defaultValue: DEFAULT_HASHTAG,
+    defaultValue: 'foobar',
     tree: configTree(),
   })
 
