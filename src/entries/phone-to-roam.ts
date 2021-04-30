@@ -22,6 +22,9 @@ const fetchNotes = () => {
       const parentUid = await findParentUid(title, oldParentId)
       const childrenQuery = window.roamAlphaAPI.q(`[ :find (pull ?e [* {:block/children [*]}]) :where [?e :block/uid "${parentUid}"]]`)
 
+      console.log('ptr log parentUid', parentUid)
+      console.log('ptr log childrenQuery', childrenQuery)
+
       if(i === 0) {
         order = childrenQuery ? (childrenQuery[0][0]?.children?.length || 0) : 0
       } else {

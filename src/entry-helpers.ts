@@ -135,7 +135,7 @@ export const findParentUid: any = async (pageName, uid) => {
       return potentialParentBlock[0]['uid']
     } else {
       const node = { text: parentBlock, children: []}
-      return createBlock({ node, parentUid: queryResults[0][0]['uid'], order: -1})
+      return createBlock({ node, parentUid: queryResults[0][0]['uid'], order: children.length})
     }
 
   } else {
