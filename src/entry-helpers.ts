@@ -36,6 +36,7 @@ const hashtagFromConfig = () => {
 } 
 
 export const configure = () => {
+  console.log('ptr logging configure')
   createConfigObserver({
     title: CONFIG,
     config: {
