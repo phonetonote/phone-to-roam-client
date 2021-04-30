@@ -38,8 +38,8 @@ const fetchNotes = () => {
   })
 }
 
-fetchNotes()
 configure()
+fetchNotes()
 
 document.addEventListener('click', (e: any) =>{
   if(e.target.innerText === 'DAILY NOTES') {
