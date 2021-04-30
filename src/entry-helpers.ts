@@ -5,7 +5,7 @@ const LINK_KEYS = ['title', 'description', 'site_name', 'content_type']
 
 const ID = "ptr";
 const CONFIG = `roam/js/${ID}`;
-const DEFAULT_HASHTAG = "phonetoroam"
+const DEFAULT_HASHTAG = "foobarDEFAULT"
 
 const toFlexRegex = (key: string): RegExp => new RegExp(`^\\s*${key}\\s*$`, "i");
 const getSettingValueFromTree = ({
