@@ -1,7 +1,7 @@
 import { toRoamDate, toRoamDateUid, genericError, pushBullets, WindowClient } from 'roam-client'
 import axios from "axios";
 import { formatRFC3339, startOfDay, endOfDay } from "date-fns";
-import { findPage, createBlock, nodeMaker, configure } from "../entry-helpers";
+import { findParentUid, createBlock, nodeMaker, configure } from "../entry-helpers";
 import Bugsnag from '@bugsnag/js'
 
 // #TODO this should change based off some netlify env variable
@@ -19,8 +19,8 @@ const fetchNotes = () => {
       const date = new Date(message['created_at'])
       const title = toRoamDate(date)
       const oldParentId = toRoamDateUid(date)
-      const parentUid = await findPage(title, oldParentId)
-      const childrenQuery = window.roamAlphaAPI.q(`[ :find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${title}"]]`)
+      const parentUid = await findParentUid(title, oldParentId)
+      const childrenQuery = window.roamAlphaAPI.q(`[ :find (pull ?e [* {:block/children [*]}]) :where [?e :block/uid "${parentUid}"]]`)
 
       if(i === 0) {
         order = childrenQuery ? (childrenQuery[0][0]?.children?.length || 0) : 0

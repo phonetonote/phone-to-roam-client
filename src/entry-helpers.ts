@@ -105,19 +105,12 @@ export const nodeMaker = (message) => {
     text += ' #telegramtoroam'
   }
 
-  const toInsert = { text: `${text}`, children: children }
-  let parentBlock = getSettingValueFromTree({
-    key: "parent block title",
-    tree: configTree(),
-  })
-
-  const validParentBlock = parentBlock && (typeof(parentBlock) === 'string') && (parentBlock.length > 0)
-  return validParentBlock ? { text: `${parentBlock}`, children: [toInsert] } : toInsert
+  return { text: `${text}`, children: children }
 }
 
-export const findPage: any = async (pageName, uid) => { 
+export const findParentUid: any = async (pageName, uid) => { 
   let queryResults = await window.roamAlphaAPI.q(
-    `[:find (pull ?e [:block/uid]) :where [?e :node/title "${pageName}"]]`
+    `[:find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${pageName}"]]`
   )
     
   if (queryResults.length === 0) {
@@ -126,11 +119,18 @@ export const findPage: any = async (pageName, uid) => {
     })
 
     queryResults = await window.roamAlphaAPI.q(
-      `[:find (pull ?e [:block/uid]) :where [?e :node/title "${pageName}"]]`
+      `[:find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${pageName}"]]`
     )      
   }
-    
-  return queryResults[0][0]["uid"];
+
+  let parentBlock = getSettingValueFromTree({
+    key: "parent block title",
+    tree: configTree(),
+  })
+
+  const children = queryResults[0][0]['children']
+  const potentialParentBlock = children.filter((item) => item['string'] === parentBlock)
+  return potentialParentBlock.length > 0 ? potentialParentBlock[0]['uid'] : queryResults[0][0]["uid"]
 }
 
 export const createBlock = ({
