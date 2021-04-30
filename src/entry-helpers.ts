@@ -128,9 +128,19 @@ export const findParentUid: any = async (pageName, uid) => {
     tree: configTree(),
   })
 
-  const children = queryResults[0][0]['children']
-  const potentialParentBlock = children.filter((item) => item['string'] === parentBlock)
-  return potentialParentBlock.length > 0 ? potentialParentBlock[0]['uid'] : queryResults[0][0]["uid"]
+  if(parentBlock && typeof(parentBlock) === 'string' && parentBlock.length > 0) {
+    const children = queryResults[0][0]['children']
+    const potentialParentBlock = children.filter((item) => item['string'] === parentBlock)
+    if(potentialParentBlock.length > 0) {
+      return potentialParentBlock[0]['uid']
+    } else {
+      const node = { text: parentBlock, children: []}
+      return createBlock({ node, parentUid: queryResults[0][0]['uid'], order: -1})
+    }
+
+  } else {
+    return queryResults[0][0]["uid"]
+  }
 }
 
 export const createBlock = ({
