@@ -1,41 +1,12 @@
-import { TextNode, TreeNode, getTreeByPageName } from "roam-client";
 import { createConfigObserver } from "roamjs-components";
-
-const LINK_KEYS = ['title', 'description', 'site_name', 'content_type']
-
-const ID = "ptr";
-const CONFIG = `roam/js/${ID}`;
-const DEFAULT_HASHTAG = "phonetoroam"
+import { getTreeByPageName, toRoamDate, toRoamDateUid, TextNode, TreeNode } from 'roam-client'
+import { CONFIG, DEFAULT_HASHTAG, LINK_KEYS, SERVER_URL } from './constants'
+import axios from "axios";
+import Bugsnag from '@bugsnag/js'
 
 const toFlexRegex = (key: string): RegExp => new RegExp(`^\\s*${key}\\s*$`, "i");
-const getSettingValueFromTree = ({
-  tree,
-  key,
-  defaultValue = "",
-}: {
-  tree: TreeNode[];
-  key: string;
-  defaultValue?: string;
-}): string => {
-  const node = tree.find((s) => toFlexRegex(key).test(s.text.trim()));
-  const value = node ? node.children[0].text.trim() : defaultValue;
-  return value;
-};
 
-const configTree = () => { return getTreeByPageName(CONFIG) }
-const hashtagFromConfig = () => {
-  let hashtag = getSettingValueFromTree({
-    key: "hashtag",
-    defaultValue: DEFAULT_HASHTAG,
-    tree: configTree(),
-  })
-
-  if(hashtag.indexOf('#') === 0) {
-    hashtag = hashtag.substring(1)
-  }
-
-  return hashtag
-} 
+export const roamKey = document.getElementById('phone-to-roam-script')?.dataset.roam_key
 
 export const configure = () => {
   createConfigObserver({
@@ -64,7 +35,24 @@ export const configure = () => {
   });
 }
 
-export const nodeMaker = (message) => {
+export const hashtagFromConfig = () => {
+  let hashtag = getSettingValueFromTree({
+    key: "hashtag",
+    defaultValue: DEFAULT_HASHTAG,
+    tree: configTree(),
+  })
+
+  if(hashtag.indexOf('#') === 0) {
+    hashtag = hashtag.substring(1)
+  }
+
+  return hashtag
+} 
+
+const configTree = () => { return getTreeByPageName(CONFIG) }
+
+
+export const nodeMaker = (message, hashtag) => {
   const children: TextNode[] = []
 
   const attachment = message?.attachments[0]
@@ -95,7 +83,7 @@ export const nodeMaker = (message) => {
     text = `[${title}](${attachment.url})`
   }
 
-  text = `${text.trim()} #${hashtagFromConfig()}`
+  text = `${text.trim()} #${hashtag}`
 
   if(message?.sender_type === 'facebook') {
     text += ' #facebooktoroam'
@@ -107,6 +95,20 @@ export const nodeMaker = (message) => {
 
   return { text: `${text}`, children: children }
 }
+
+export const getSettingValueFromTree = ({
+  tree,
+  key,
+  defaultValue = "",
+}: {
+  tree: TreeNode[];
+  key: string;
+  defaultValue?: string;
+}): string => {
+  const node = tree.find((s) => toFlexRegex(key).test(s.text.trim()));
+  const value = node ? node.children[0].text.trim() : defaultValue;
+  return value;
+};
 
 export const findParentUid: any = async (pageName, uid) => { 
   let queryResults = await window.roamAlphaAPI.q(
@@ -162,3 +164,30 @@ export const createBlock = ({
   );
   return uid;
 };
+
+export const fetchNotes = (hashtag) => {
+  axios(`${SERVER_URL}/messages.json?roam_key=${roamKey}`).then(async (res) => {
+    let order = 0
+    res.data.forEach(async (message, i) => {
+      const node = nodeMaker(message, hashtag)
+      const date = new Date(message['created_at'])
+      const title = toRoamDate(date)
+      const oldParentId = toRoamDateUid(date)
+      const parentUid = await findParentUid(title, oldParentId)
+      const childrenQuery = window.roamAlphaAPI.q(`[ :find (pull ?e [* {:block/children [*]}]) :where [?e :block/uid "${parentUid}"]]`)
+
+      if(i === 0) {
+        order = (childrenQuery && childrenQuery[0] && childrenQuery[0][0]) ? (childrenQuery[0][0]?.children?.length || 0) : 0
+      } else {
+        order = order + 1
+      }
+      
+      
+      createBlock({ node, parentUid, order })
+      axios.patch(`${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`, {"status": "published"})
+    })
+  }).catch((e) => {
+    console.log('phonetoroam error', e)
+    Bugsnag.notify(e)
+  })
+}
