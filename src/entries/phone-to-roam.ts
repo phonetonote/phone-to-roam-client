@@ -21,7 +21,7 @@ const fetchNotes = () => {
       const oldParentId = toRoamDateUid(date)
       const parentUid = await findPage(title, oldParentId)
       const childrenQuery = window.roamAlphaAPI.q(`[ :find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${title}"]]`)
-      console.log('ptr logging', [i, childrenQuery, order])
+
       if(i === 0) {
         order = childrenQuery ? (childrenQuery[0][0]?.children?.length || 0) : 0
       } else {

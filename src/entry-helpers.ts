@@ -5,7 +5,7 @@ const LINK_KEYS = ['title', 'description', 'site_name', 'content_type']
 
 const ID = "ptr";
 const CONFIG = `roam/js/${ID}`;
-const DEFAULT_HASHTAG = "foobarDEFAULT"
+const DEFAULT_HASHTAG = "phonetoroam"
 
 const toFlexRegex = (key: string): RegExp => new RegExp(`^\\s*${key}\\s*$`, "i");
 const getSettingValueFromTree = ({
@@ -24,19 +24,20 @@ const getSettingValueFromTree = ({
 
 const configTree = () => { return getTreeByPageName(CONFIG) }
 const hashtagFromConfig = () => {
-  console.log('ptr logging configTree()', configTree())
-  const hashtag = getSettingValueFromTree({
+  let hashtag = getSettingValueFromTree({
     key: "hashtag",
-    defaultValue: 'foobar',
+    defaultValue: DEFAULT_HASHTAG,
     tree: configTree(),
   })
 
-  console.log('ptr logging hashtag', hashtag)
+  if(hashtag.indexOf('#') === 0) {
+    hashtag = hashtag.substring(1)
+  }
+
   return hashtag
 } 
 
 export const configure = () => {
-  console.log('ptr logging configure')
   createConfigObserver({
     title: CONFIG,
     config: {
@@ -64,7 +65,6 @@ export const configure = () => {
 }
 
 export const nodeMaker = (message) => {
-  console.log('ptr logging nodeMaker')
   const children: TextNode[] = []
 
   const attachment = message?.attachments[0]
@@ -96,7 +96,6 @@ export const nodeMaker = (message) => {
   }
 
   text = `${text.trim()} #${hashtagFromConfig()}`
-  console.log('ptr logging text', text)
 
   if(message?.sender_type === 'facebook') {
     text += ' #facebooktoroam'
@@ -106,7 +105,14 @@ export const nodeMaker = (message) => {
     text += ' #telegramtoroam'
   }
 
-  return { text: `${text}`, children: children }
+  const toInsert = { text: `${text}`, children: children }
+  let parentBlock = getSettingValueFromTree({
+    key: "parent block title",
+    tree: configTree(),
+  })
+
+  const validParentBlock = parentBlock && (typeof(parentBlock) === 'string') && (parentBlock.length > 0)
+  return validParentBlock ? { text: `${parentBlock}`, children: [toInsert] } : toInsert
 }
 
 export const findPage: any = async (pageName, uid) => { 
