@@ -63,6 +63,7 @@ export const configure = () => {
 }
 
 export const nodeMaker = (message) => {
+  console.log('ptr logging nodeMaker')
   const children: TextNode[] = []
 
   const attachment = message?.attachments[0]
@@ -94,6 +95,7 @@ export const nodeMaker = (message) => {
   }
 
   text = `${text.trim()} #${hashtagFromConfig()}`
+  console.log('ptr logging text', text)
 
   if(message?.sender_type === 'facebook') {
     text += ' #facebooktoroam'
