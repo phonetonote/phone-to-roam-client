@@ -1,5 +1,5 @@
 // #TODO this should change based off some netlify env variable
-export const SERVER_URL = 'https://phonetoroam.com'
+export const SERVER_URL = 'https://www.phonetoroam.com'
 
 export const ID = "ptr";
 export const CONFIG = `roam/js/${ID}`;
