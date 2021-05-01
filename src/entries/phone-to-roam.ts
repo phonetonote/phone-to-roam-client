@@ -10,8 +10,7 @@ fetchNotes(hashtag)
 
 document.addEventListener('click', (e: any) =>{
   if(e.target.innerText.toUpperCase() === 'DAILY NOTES') {
-    // fetchNotes(hashtag)
-    console.log('foo')
+    fetchNotes(hashtag)
   }
 })
 

@@ -46,7 +46,7 @@ export const hashtagFromConfig = () => {
     hashtag = hashtag.substring(1)
   }
 
-  return hashtag
+  return (hashtag && (typeof(hashtag) === 'string') && (hashtag.length > 0)) ? hashtag : ""
 } 
 
 const configTree = () => { return getTreeByPageName(CONFIG) }
