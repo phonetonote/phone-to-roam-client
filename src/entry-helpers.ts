@@ -83,7 +83,10 @@ export const nodeMaker = (message, hashtag) => {
     text = `[${title}](${attachment.url})`
   }
 
-  text = `${text.trim()} #${hashtag}`
+  text = `${text.trim()}`
+  if(hashtag && (typeof(hashtag) === 'string') && (hashtag.length > 0)) {
+    text = `${text} #${hashtag}`
+  }
 
   if(message?.sender_type === 'facebook') {
     text += ' #facebooktoroam'
