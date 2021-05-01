@@ -9,8 +9,9 @@ const hashtag = hashtagFromConfig()
 fetchNotes(hashtag)
 
 document.addEventListener('click', (e: any) =>{
-  if(e.target.innerText === 'DAILY NOTES') {
-    fetchNotes(hashtag)
+  if(e.target.innerText.toUpperCase() === 'DAILY NOTES') {
+    // fetchNotes(hashtag)
+    console.log('foo')
   }
 })
 
