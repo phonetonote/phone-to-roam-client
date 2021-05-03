@@ -125,6 +125,7 @@ const parentBlock = getSettingValueFromTree({
 })
 
 export const findParentUid: any = async (pageName, uid) => { 
+  console.log('ptr log findParentUid', pageName, uid)
   let queryResults = await window.roamAlphaAPI.q(
     `[:find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${pageName}"]]`
   )
