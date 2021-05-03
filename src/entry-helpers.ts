@@ -5,6 +5,11 @@ import axios from "axios";
 import Bugsnag from '@bugsnag/js'
 
 const toFlexRegex = (key: string): RegExp => new RegExp(`^\\s*${key}\\s*$`, "i");
+const configTree = () => { return getTreeByPageName(CONFIG) }
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 export const roamKey = document.getElementById('phone-to-roam-script')?.dataset.roam_key
 
@@ -35,12 +40,14 @@ export const configure = () => {
   });
 }
 
+const getHashtag = () => getSettingValueFromTree({
+  key: "hashtag",
+  defaultValue: DEFAULT_HASHTAG,
+  tree: configTree(),
+})
+
 export const hashtagFromConfig = () => {
-  let hashtag = getSettingValueFromTree({
-    key: "hashtag",
-    defaultValue: DEFAULT_HASHTAG,
-    tree: configTree(),
-  })
+  let hashtag = getHashtag()
 
   if(hashtag.indexOf('#') === 0) {
     hashtag = hashtag.substring(1)
@@ -49,7 +56,6 @@ export const hashtagFromConfig = () => {
   return (hashtag && (typeof(hashtag) === 'string') && (hashtag.length > 0)) ? hashtag : ""
 } 
 
-const configTree = () => { return getTreeByPageName(CONFIG) }
 
 
 export const nodeMaker = (message, hashtag) => {
@@ -113,6 +119,11 @@ export const getSettingValueFromTree = ({
   return value;
 };
 
+const parentBlock = getSettingValueFromTree({
+  key: "parent block title",
+  tree: configTree(),
+})
+
 export const findParentUid: any = async (pageName, uid) => { 
   let queryResults = await window.roamAlphaAPI.q(
     `[:find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${pageName}"]]`
@@ -127,11 +138,6 @@ export const findParentUid: any = async (pageName, uid) => {
       `[:find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${pageName}"]]`
     )      
   }
-
-  let parentBlock = getSettingValueFromTree({
-    key: "parent block title",
-    tree: configTree(),
-  })
 
   if(parentBlock && typeof(parentBlock) === 'string' && parentBlock.length > 0) {
     const children = queryResults[0][0]['children']
@@ -188,6 +194,7 @@ export const fetchNotes = (hashtag) => {
       
       createBlock({ node, parentUid, order })
       axios.patch(`${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`, {"status": "published"})
+      sleep(500)
     })
   }).catch((e) => {
     console.log('phonetoroam error', e)

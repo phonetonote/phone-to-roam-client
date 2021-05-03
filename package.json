@@ -10,6 +10,10 @@
     "prelambda": "webpack --config ./webpack.debug.config.js",
     "test": "jest"
   },
+  "jest": {
+    "moduleFileExtensions": ["js", "jsx"],
+    "moduleDirectories": ["node_modules", "bower_components", "src"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/scottrblock/phone-to-roam-client.git"
