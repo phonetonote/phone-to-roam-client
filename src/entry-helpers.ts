@@ -194,10 +194,9 @@ export const fetchNotes = (hashtag) => {
         order = order + 1
       }
       
-      
-      createBlock({ node, parentUid, order })
-      axios.patch(`${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`, {"status": "published"})
-      sleep(500)
+      await createBlock({ node, parentUid, order })
+      await axios.patch(`${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`, {"status": "published"})
+      await sleep(500)
     })
   }).catch((e) => {
     console.log('phonetoroam error', e)
