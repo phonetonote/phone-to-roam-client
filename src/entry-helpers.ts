@@ -222,6 +222,8 @@ export const fetchNotes = async (hashtag) => {
       return obj;
     }, {})
 
+    console.log('ptr messagesByParentId', messagesByParentId)
+
     const parentIds = Object.keys(messagesByParentId)
     for(var i = 0; i < parentIds.length; i++) {
       const parentUid = parentIds[i]
