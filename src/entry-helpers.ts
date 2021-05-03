@@ -177,27 +177,73 @@ export const createBlock = ({
   return uid;
 };
 
-export const fetchNotes = (hashtag) => {
+const findOrCreateParentUid: any = async (date) => {
+  const pageName = toRoamDate(date)
+  const roamUid = toRoamDateUid(date)
+  let queryResults = await window.roamAlphaAPI.q(
+    `[:find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${pageName}"]]`
+  )
+    
+  if (queryResults.length === 0) {
+    const basicPage: any = await window.roamAlphaAPI.createPage({
+      page: { title: pageName, uid: roamUid }
+    })
+
+    queryResults = await window.roamAlphaAPI.q(
+      `[:find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${pageName}"]]`
+    )      
+  }
+
+  if(parentBlock && typeof(parentBlock) === 'string' && parentBlock.length > 0) {
+    const children = await window.roamAlphaAPI.q(
+      `[:find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${pageName}"]]`)[0][0]['children'] || []
+    const potentialParentBlock = children.filter((item) => item['string'] === parentBlock)
+    if(potentialParentBlock.length > 0) {
+      return potentialParentBlock[0]['uid']
+    } else {
+      const node = { text: parentBlock, children: []}
+      return await createBlock({ node, parentUid: queryResults[0][0]['uid'], order: children.length})
+    }
+
+  } else {
+    return queryResults[0][0]["uid"]
+  }
+}
+
+export const fetchNotes = async (hashtag) => {
   axios(`${SERVER_URL}/messages.json?roam_key=${roamKey}`).then(async (res) => {
     let order = 0
-    res.data.forEach(async (message, i) => {
-      const node = nodeMaker(message, hashtag)
+    const messagesByParentId = res.data.reduce(function(obj, message) {
       const date = new Date(message['created_at'])
-      const title = toRoamDate(date)
-      const oldParentId = toRoamDateUid(date)
-      const parentUid = await findParentUid(title, oldParentId)
-      const childrenQuery = window.roamAlphaAPI.q(`[ :find (pull ?e [* {:block/children [*]}]) :where [?e :block/uid "${parentUid}"]]`)
+      const parentUid = findOrCreateParentUid(date)
 
-      if(i === 0) {
-        order = (childrenQuery && childrenQuery[0] && childrenQuery[0][0]) ? (childrenQuery[0][0]?.children?.length || 0) : 0
-      } else {
-        order = order + 1
+      if (!obj.hasOwnProperty(parentUid)) { obj[parentUid] = [] }
+      obj[parentUid]['messages'].push(message);
+      return obj;
+    }, {})
+
+    const parentIds = Object.keys(messagesByParentId)
+    for(var i = 0; i < parentIds.length; i++) {
+      const parentUid = parentIds[i]
+      const messages = messagesByParentId[parentUid]
+
+      for(var j = 0; j < messages.length; j++) {
+        const message = messages[j]
+        const node = nodeMaker(message, hashtag)
+
+        const childrenQuery = window.roamAlphaAPI.q(`[ :find (pull ?e [* {:block/children [*]}]) :where [?e :block/uid "${parentUid}"]]`)
+
+        if(i === 0) {
+          order = (childrenQuery && childrenQuery[0] && childrenQuery[0][0]) ? (childrenQuery[0][0]?.children?.length || 0) : 0
+        } else {
+          order = order + 1
+        }
+        
+        await createBlock({ node, parentUid, order })
+        await axios.patch(`${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`, {"status": "published"})
+        await sleep(1000)
       }
-      
-      await createBlock({ node, parentUid, order })
-      await axios.patch(`${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`, {"status": "published"})
-      await sleep(1000)
-    })
+    }
   }).catch((e) => {
     console.log('phonetoroam error', e)
     Bugsnag.notify(e)
