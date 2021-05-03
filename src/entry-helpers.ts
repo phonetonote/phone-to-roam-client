@@ -218,7 +218,7 @@ export const fetchNotes = async (hashtag) => {
       const parentUid = findOrCreateParentUid(date)
 
       if (!obj.hasOwnProperty(parentUid)) { obj[parentUid] = [] }
-      obj[parentUid]['messages'].push(message);
+      obj[parentUid].push(message);
       return obj;
     }, {})
 
