@@ -141,7 +141,7 @@ export const findParentUid: any = async (pageName, uid) => {
 
   if(parentBlock && typeof(parentBlock) === 'string' && parentBlock.length > 0) {
     const children = await window.roamAlphaAPI.q(
-      `[:find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${pageName}"]]`)[0][0]['children']
+      `[:find (pull ?e [* {:block/children [*]}]) :where [?e :node/title "${pageName}"]]`)[0][0]['children'] || []
     const potentialParentBlock = children.filter((item) => item['string'] === parentBlock)
     if(potentialParentBlock.length > 0) {
       return potentialParentBlock[0]['uid']
