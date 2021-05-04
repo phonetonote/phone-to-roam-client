@@ -230,9 +230,10 @@ export const fetchNotes = async (hashtag) => {
     for(var i = 0; i < pageNames.length; i++) {
       const pageName = pageNames[i]
       const messages = messagesByPageName[pageName]
+      console.log('ptr messages', messages)
       const date = messages[0]['created_at']
       const parentUid = findOrCreateParentUid(date)
-
+      console.log('ptr parentUid', parentUid)
       for(var j = 0; j < messages.length; j++) {
         const message = messages[j]
         const node = nodeMaker(message, hashtag)
