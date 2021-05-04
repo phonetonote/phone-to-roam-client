@@ -213,21 +213,25 @@ const findOrCreateParentUid: any = (date) => {
 export const fetchNotes = async (hashtag) => {
   axios(`${SERVER_URL}/messages.json?roam_key=${roamKey}`).then(async (res) => {
     let order = 0
-    const messagesByParentId = res.data.reduce(function(obj, message) {
+    const messagesByPageName = res.data.reduce(function(obj, message) {
       const date = new Date(message['created_at'])
-      const parentUid = findOrCreateParentUid(date)
+      const pageName = toRoamDate(date)
+      // const parentUid = findOrCreateParentUid(date)
 
-      if (!obj.hasOwnProperty(parentUid)) { obj[parentUid] = [] }
-      obj[parentUid].push(message);
+      if (!obj.hasOwnProperty(pageName)) { obj[pageName] = [] }
+      obj[pageName].push(message);
       return obj;
     }, {})
 
-    console.log('ptr messagesByParentId', messagesByParentId)
+    console.log('ptr messagesByPageName', messagesByPageName)
 
-    const parentIds = Object.keys(messagesByParentId)
-    for(var i = 0; i < parentIds.length; i++) {
-      const parentUid = parentIds[i]
-      const messages = messagesByParentId[parentUid]
+    const pageNames = Object.keys(messagesByPageName)
+
+    for(var i = 0; i < pageNames.length; i++) {
+      const pageName = pageNames[i]
+      const messages = messagesByPageName[pageName]
+      const date = messages[0]['created_at']
+      const parentUid = findOrCreateParentUid(date)
 
       for(var j = 0; j < messages.length; j++) {
         const message = messages[j]
