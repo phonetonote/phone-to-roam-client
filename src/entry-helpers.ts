@@ -231,7 +231,7 @@ export const fetchNotes = async (hashtag) => {
       const pageName = pageNames[i]
       const messages = messagesByPageName[pageName]
       console.log('ptr messages', messages)
-      const date = messages[0]['created_at']
+      const date = new Date(messages[0]['created_at'])
       const parentUid = findOrCreateParentUid(date)
       console.log('ptr parentUid', parentUid)
       for(var j = 0; j < messages.length; j++) {
