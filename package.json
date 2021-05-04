@@ -11,8 +11,10 @@
     "test": "jest"
   },
   "jest": {
+    "verbose": true,
     "moduleFileExtensions": ["js", "jsx"],
     "moduleDirectories": ["node_modules", "bower_components", "src"]
+
   },
   "repository": {
     "type": "git",

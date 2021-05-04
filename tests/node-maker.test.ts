@@ -1,4 +1,4 @@
-import { nodeMaker } from "../src/entry-helpers"
+import { nodeMaker } from "../src/node-maker"
 
 const mediaUrl = "http://example.com/s3-bucket/file.jpg"
 const hashtag = 'phonetoroam'
