@@ -1,33 +1,13 @@
 import { createConfigObserver } from "roamjs-components";
 import { CONFIG, DEFAULT_HASHTAG } from './constants'
+import { getSettingValueFromTree } from './entry-helpers'
 import { getTreeByPageName, TreeNode } from 'roam-client'
 
-const toFlexRegex = (key: string): RegExp => new RegExp(`^\\s*${key}\\s*$`, "i");
-const configTree = () => { return getTreeByPageName(CONFIG) }
-
-const getSettingValueFromTree = ({
-  tree,
-  key,
-  defaultValue = "",
-}: {
-  tree: TreeNode[];
-  key: string;
-  defaultValue?: string;
-}): string => {
-  const node = tree.find((s) => toFlexRegex(key).test(s.text.trim()));
-  const value = node ? node.children[0].text.trim() : defaultValue;
-  return value;
-};
 
 const getHashtag = () => getSettingValueFromTree({
   key: "hashtag",
   defaultValue: DEFAULT_HASHTAG,
-  tree: configTree(),
-})
-
-export const parentBlock = getSettingValueFromTree({
-  key: "parent block title",
-  tree: configTree(),
+  tree: getTreeByPageName(CONFIG),
 })
 
 export const hashtagFromConfig = (): string => {
