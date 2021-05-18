@@ -13,10 +13,12 @@ export const roamKey = document.getElementById(SCRIPT_ID)?.dataset.roam_key
 export const fetchNotes = async (hashtag) => {
   axios(`${SERVER_URL}/messages.json?roam_key=${roamKey}`).then(async (res) => {
     const messagesByPageName = res.data.reduce(reduceMessages, {})
+    console.log('ptr log messagesByPageName', messagesByPageName)
 
     for(const pageName in Object.keys(messagesByPageName)) {
-      const messages = messagesByPageName[pageName], 
-            date = new Date(messages[0]['created_at']), 
+      const messages = messagesByPageName[pageName];
+      console.log('ptr log messages', messages)
+      const date = new Date(messages[0]['created_at']), 
             parentUid = findOrCreateParentUid(date, parentBlock, window.roamAlphaAPI, createBlock), // todo replace roam API with roamjs typed version,
             localStartingOrder = startingOrder(parentUid, window.roamAlphaAPI)
 
