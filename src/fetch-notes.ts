@@ -16,7 +16,7 @@ export const fetchNotes = async (hashtag) => {
     console.log('\n\nptr log *******************************')
     console.log('ptr log messagesByPageName', messagesByPageName)
 
-    for(const pageName in Object.keys(messagesByPageName)) {
+    for(const pageName in messagesByPageName) {
       console.log('ptr log pageName', pageName)
       const messages = messagesByPageName[pageName];
       console.log('ptr log messages', messages)
