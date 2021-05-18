@@ -13,9 +13,11 @@ export const roamKey = document.getElementById(SCRIPT_ID)?.dataset.roam_key
 export const fetchNotes = async (hashtag) => {
   axios(`${SERVER_URL}/messages.json?roam_key=${roamKey}`).then(async (res) => {
     const messagesByPageName = res.data.reduce(reduceMessages, {})
+    console.log('\n\nptr log *******************************')
     console.log('ptr log messagesByPageName', messagesByPageName)
 
     for(const pageName in Object.keys(messagesByPageName)) {
+      console.log('ptr log pageName', pageName)
       const messages = messagesByPageName[pageName];
       console.log('ptr log messages', messages)
       const date = new Date(messages[0]['created_at']), 
@@ -28,6 +30,9 @@ export const fetchNotes = async (hashtag) => {
         await axios.patch(`${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`, {"status": "published"})
       }
     }
+
+    console.log('ptr log *******************************\n\n')
+
   }).catch((e) => {
     console.log('phonetoroam error', e)
     Bugsnag.notify(e)
