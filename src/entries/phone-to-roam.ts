@@ -1,4 +1,4 @@
-import { fetchNotes, roamKey } from "../entry-helpers";
+import { fetchNotes, roamKey } from "../fetch-notes";
 import { hashtagFromConfig, configure } from "../configure"
 import Bugsnag from '@bugsnag/js'
 

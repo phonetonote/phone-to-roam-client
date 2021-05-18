@@ -1,6 +1,6 @@
 import { createConfigObserver } from "roamjs-components";
 import { CONFIG, DEFAULT_HASHTAG } from './constants'
-import { getSettingValueFromTree } from './entry-helpers'
+import { getSettingValueFromTree } from 'roamjs-components'
 import { getTreeByPageName, TreeNode } from 'roam-client'
 
 
