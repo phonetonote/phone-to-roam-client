@@ -2,9 +2,8 @@ import { TextNode } from 'roam-client'
 import { LINK_KEYS } from './constants'
 
 export const nodeMaker = (message, hashtag) => {
-  const children: TextNode[] = []
-
-  const attachment = message?.attachments[0]
+  const children: TextNode[] = [],
+        attachment = message?.attachments[0]
   let text = message['text']
 
   if(attachment?.media_type === 'link') {
