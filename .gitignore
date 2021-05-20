@@ -4,3 +4,4 @@ terraform.exe
 dist/
 build
 out
+.env
