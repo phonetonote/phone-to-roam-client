@@ -35,7 +35,7 @@ export const nodeMaker = (message, hashtag) => {
   const validHashtag =
     hashtag && typeof hashtag === "string" && hashtag.length > 0;
   const existingTags = /#\w+toroam/;
-  const needsNewTag = !!!text.match(existingTags).length;
+  const needsNewTag = !!!text.match(existingTags)?.length;
 
   if (validHashtag && needsNewTag) {
     text = `${text} #${hashtag}`;
