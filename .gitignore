@@ -5,3 +5,4 @@ dist/
 build
 out
 .env
+coverage/
