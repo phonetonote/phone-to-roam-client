@@ -16,7 +16,7 @@ export const indexPages = async () => {
 
   // send them to backend
   await axios
-    .post(`${SERVER_URL}/titles/create.json`, {
+    .post(`${SERVER_URL}/titles.json`, {
       titles,
       roam_key: roamKey,
     })
