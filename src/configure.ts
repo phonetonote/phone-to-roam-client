@@ -18,12 +18,6 @@ const indexingEnabled = () => {
   console.warn(getTreeByPageName(CONFIG));
   throw `this is the tree ${getTreeByPageName(CONFIG)}`;
 };
-getSettingValueFromTree({
-  //todo this should return a boolean or I should conver it to that
-  key: "enable_indexing",
-  defaultValue: undefined,
-  tree: getTreeByPageName(CONFIG),
-});
 
 const hashtagFromConfig = (): string => {
   let hashtag = getHashtag();
