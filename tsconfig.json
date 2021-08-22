@@ -9,11 +9,7 @@
     "esModuleInterop": true,
     "allowJs": true,
     "jsx": "react-jsx",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -22,8 +18,5 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": [
-    "src",
-    "local-app-env.d.ts"
-  ]
+  "include": ["src", "local-app-env.d.ts"]
 }

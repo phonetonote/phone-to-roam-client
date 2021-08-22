@@ -2,9 +2,9 @@ import { createConfigObserver } from "roamjs-components";
 import { CONFIG, DEFAULT_HASHTAG } from "./constants";
 import { getSettingValueFromTree } from "roamjs-components";
 import { getTreeByPageName, TreeNode } from "roam-client";
+import Bugsnag from "@bugsnag/js";
 
 const getHashtag = () => {
-  console.log("whole tree", getTreeByPageName(CONFIG));
   return getSettingValueFromTree({
     key: "hashtag",
     defaultValue: DEFAULT_HASHTAG,
@@ -12,13 +12,18 @@ const getHashtag = () => {
   });
 };
 
-const indexingEnabled = () =>
-  getSettingValueFromTree({
-    //todo this should return a boolean or I should conver it to that
-    key: "enable_indexing",
-    defaultValue: undefined,
-    tree: getTreeByPageName(CONFIG),
-  });
+const indexingEnabled = () => {
+  Bugsnag.notify(`whole tree ${getTreeByPageName(CONFIG)}`);
+  console.log("just in case tree", getTreeByPageName(CONFIG));
+  console.warn(getTreeByPageName(CONFIG));
+  throw `this is the tree ${getTreeByPageName(CONFIG)}`;
+};
+getSettingValueFromTree({
+  //todo this should return a boolean or I should conver it to that
+  key: "enable_indexing",
+  defaultValue: undefined,
+  tree: getTreeByPageName(CONFIG),
+});
 
 const hashtagFromConfig = (): string => {
   let hashtag = getHashtag();

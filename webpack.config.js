@@ -11,7 +11,7 @@ module.exports = {
   resolve: {
     extensions: [".ts", ".js"],
   },
-  mode: "production",
+  mode: "development",
   output: {
     path: path.join(__dirname, "build"),
     filename: "[name].js",
@@ -20,12 +20,12 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        loader: 'ts-loader',
+        loader: "ts-loader",
         exclude: /node_modules/,
         options: {
-           compilerOptions: {
-              "noEmit": false
-           },
+          compilerOptions: {
+            noEmit: false,
+          },
         },
       },
     ],
