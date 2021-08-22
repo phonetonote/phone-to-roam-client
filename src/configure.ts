@@ -13,10 +13,12 @@ const getHashtag = () => {
 };
 
 const indexingEnabled = () => {
-  Bugsnag.notify(`whole tree ${getTreeByPageName(CONFIG)}`);
-  console.log("just in case tree", getTreeByPageName(CONFIG));
-  console.warn(getTreeByPageName(CONFIG));
-  throw `this is the tree ${getTreeByPageName(CONFIG)}`;
+  const tree = getTreeByPageName(CONFIG);
+  if (tree && tree.length > 0) {
+    return tree.filter((obj) => obj.text === "enable_indexing").length > 0;
+  } else {
+    return false;
+  }
 };
 
 const hashtagFromConfig = (): string => {
