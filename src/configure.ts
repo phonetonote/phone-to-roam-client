@@ -3,12 +3,14 @@ import { CONFIG, DEFAULT_HASHTAG } from "./constants";
 import { getSettingValueFromTree } from "roamjs-components";
 import { getTreeByPageName, TreeNode } from "roam-client";
 
-const getHashtag = () =>
-  getSettingValueFromTree({
+const getHashtag = () => {
+  console.log("whole tree", getTreeByPageName(CONFIG));
+  return getSettingValueFromTree({
     key: "hashtag",
     defaultValue: DEFAULT_HASHTAG,
     tree: getTreeByPageName(CONFIG),
   });
+};
 
 const indexingEnabled = () =>
   getSettingValueFromTree({
