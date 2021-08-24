@@ -19,7 +19,7 @@ if (indexingEnabled) {
 }
 
 document.addEventListener("click", (e: any) => {
-  if (e.target.innerText.toUpperCase() === "DAILY NOTES") {
+  if (e?.target?.innerText?.toUpperCase() === "DAILY NOTES") {
     fetchNotes(hashtag);
   }
 });
