@@ -16,6 +16,7 @@ fetchNotes(hashtag);
 
 if (indexingEnabled) {
   indexPages();
+  window.setInterval(() => indexPages(), 1000 * 60 * 20);
 }
 
 document.addEventListener("click", (e: any) => {
@@ -25,4 +26,3 @@ document.addEventListener("click", (e: any) => {
 });
 
 window.setInterval(() => fetchNotes(hashtag), 1000 * 20);
-window.setInterval(() => indexPages(), 1000 * 60 * 20);
