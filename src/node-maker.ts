@@ -60,13 +60,5 @@ export const nodeMaker = (message: Message, hashtag: string) => {
     text = `${text} #${hashtag}`;
   }
 
-  if (message?.sender_type === "facebook") {
-    text += " #facebooktoroam";
-  } else if (message?.sender_type === "alfred") {
-    text += " #alfredtoroam";
-  } else if (message?.sender_type === "telegram") {
-    text += " #telegramtoroam";
-  }
-
   return { text: `${text}`, children: children };
 };
