@@ -1,10 +1,17 @@
-import { createConfigObserver } from "roamjs-components";
-import { CONFIG, DEFAULT_HASHTAG } from "./constants";
-import { getSettingValueFromTree } from "roamjs-components";
+import {
+  createConfigObserver,
+  getSettingValueFromTree,
+} from "roamjs-components";
+import {
+  CONFIG,
+  DEFAULT_HASHTAG,
+  HASHTAG_KEY,
+  PARENT_BLOCK_KEY,
+} from "./constants";
 import { getTreeByPageName, TreeNode } from "roam-client";
 import Bugsnag from "@bugsnag/js";
 
-const getHashtag = () => {
+const getHashtag = (): string => {
   return getSettingValueFromTree({
     key: "hashtag",
     defaultValue: DEFAULT_HASHTAG,
@@ -12,7 +19,7 @@ const getHashtag = () => {
   });
 };
 
-const indexingEnabled = () => {
+const indexingEnabled = (): boolean => {
   const tree = getTreeByPageName(CONFIG);
   if (tree && tree.length > 0) {
     return tree.filter((obj) => obj.text === "enable_indexing").length > 0;
@@ -38,6 +45,59 @@ export const configValues = {
   hashtag: hashtagFromConfig(),
 };
 
+export const inputTypes = [
+  "sms",
+  "facebook",
+  "alfred",
+  "telegram",
+  "zapier",
+  "email",
+];
+
+let fields: any[] = [];
+fields = fields.concat([
+  {
+    type: "flag",
+    title: "enable_indexing",
+    description:
+      "((ALPHA FEATURE)) turn this on to allow us to start indexing your roam page titles. for now, we'll store them in our database. eventually, you'll be able to search your existing pages quickly from mobile.",
+  },
+  {
+    type: "text",
+    title: `${HASHTAG_KEY}`,
+    description:
+      "if you want  #hashtag at the end of each phonetoroam note, put what you want that hashtag to be here. if you do not want a hashtag, make this blank.",
+    defaultValue: DEFAULT_HASHTAG,
+  },
+  {
+    type: "text",
+    title: `${PARENT_BLOCK_KEY}`,
+    description:
+      "if you want your phonetoroam notes nested under a block, give that block a name here. if you do not want them nested under anything, leave this blank.",
+    defaultValue: "phonetoroam notes",
+  },
+]);
+
+fields = fields.concat(
+  inputTypes.map((inputType) => {
+    return {
+      type: "text",
+      title: `${inputType} ${HASHTAG_KEY}`,
+      description: `hashtag for messages sent via ${inputType}, will over ride global hashtag setting.`,
+    };
+  })
+);
+
+fields = fields.concat(
+  inputTypes.map((inputType) => {
+    return {
+      type: "text",
+      title: `${inputType} ${PARENT_BLOCK_KEY}`,
+      description: `name of the parent block for messages sent via ${inputType}, will over ride global parent block title setting.`,
+    };
+  })
+);
+
 export const configure = () => {
   createConfigObserver({
     title: CONFIG,
@@ -45,28 +105,7 @@ export const configure = () => {
       tabs: [
         {
           id: "home",
-          fields: [
-            {
-              type: "flag",
-              title: "enable_indexing",
-              description:
-                "((ALPHA FEATURE)) turn this on to allow us to start indexing your roam page titles. for now, we'll store them in our database. eventually, you'll be able to search your existing pages quickly from mobile.",
-            },
-            {
-              type: "text",
-              title: "hashtag",
-              description:
-                "if you want  #hashtag at the end of each phonetoroam note, put what you want that hashtag to be here. if you do not want a hashtag, make this blank.",
-              defaultValue: DEFAULT_HASHTAG,
-            },
-            {
-              type: "text",
-              title: "parent block title",
-              description:
-                "if you want your phonetoroam notes nested under a block, give that block a name here. if you do not want them nested under anything, leave this blank.",
-              defaultValue: "phonetoroam notes",
-            },
-          ],
+          fields,
         },
       ],
     },

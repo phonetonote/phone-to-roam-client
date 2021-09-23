@@ -1,10 +1,20 @@
 import { toRoamDate, toRoamDateUid, parseRoamDate } from "roam-client";
+import { RoamBasicBlock } from "roam-client/lib/types";
+
+type RoamNode = {
+  text: string;
+  children: RoamNode[];
+};
 
 export const findOrCreateParentUid = (
   date: Date,
   parentBlock: String | undefined,
   roamAPI: any,
-  createBlock: (Object) => string
+  createBlock: (obj: {
+    node: RoamNode;
+    parentUid: string;
+    order: number;
+  }) => string
 ): string => {
   const pageName = toRoamDate(date),
     roamUid = toRoamDateUid(date),
@@ -29,9 +39,9 @@ export const findOrCreateParentUid = (
 
   // search for the matching parent block
   const children = results()[0][0]["children"] || [];
-  const potentialParentBlock = children.filter(
-    (item) => item["string"] === parentBlock
-  );
+  const potentialParentBlock = children.filter((pBlock: any) => {
+    return pBlock.string === parentBlock;
+  });
 
   // if the matching parent block exists, return it
   if (potentialParentBlock.length > 0) {

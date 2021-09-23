@@ -1,7 +1,26 @@
 import { TextNode } from "roam-client";
 import { LINK_KEYS } from "./constants";
 
-export const nodeMaker = (message, hashtag) => {
+type LinkKey = typeof LINK_KEYS[number];
+
+type Attachment = {
+  [linkKey in LinkKey]: string;
+} & {
+  media_type: string;
+  image_url: string;
+  url: string;
+};
+
+export type Message = {
+  type: string;
+  body: string;
+  message: string;
+  text: string;
+  attachments: Attachment[];
+  sender_type: string;
+  created_at: string;
+};
+export const nodeMaker = (message: Message, hashtag: string) => {
   const children: TextNode[] = [];
   const attachment = message?.attachments[0];
   let text = message["text"];
@@ -14,7 +33,7 @@ export const nodeMaker = (message, hashtag) => {
       });
     }
 
-    LINK_KEYS.forEach((k) => {
+    LINK_KEYS.forEach((k: LinkKey) => {
       const v = attachment[k];
       if (v?.length > 0) {
         children.push({
