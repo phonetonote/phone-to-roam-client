@@ -60,7 +60,7 @@ fields = fields.concat([
     type: "flag",
     title: "enable_indexing",
     description:
-      "((ALPHA FEATURE)) turn this on to allow us to start indexing your roam page titles. for now, we'll store them in our database. eventually, you'll be able to search your existing pages quickly from mobile.",
+      "((BETA FEATURE)) turn this on to allow us to start indexing your roam page titles for use in the helpful keyboard iOS app.",
   },
   {
     type: "text",
