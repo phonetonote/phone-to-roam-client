@@ -1,7 +1,11 @@
 import axios from "axios";
 import { SCRIPT_ID, SERVER_URL } from "./constants";
 import { findOrCreateParentUid } from "./find-or-create-parent-uid";
-import { createBlock } from "roam-client";
+import {
+  createBlock,
+  InputTextNode,
+  getCreateTimeByBlockUid,
+} from "roam-client";
 import { Message, nodeMaker } from "./node-maker";
 import Bugsnag from "@bugsnag/js";
 import {
@@ -39,15 +43,23 @@ export const fetchNotes = async () => {
               createBlock
             );
           for (const [i, message] of messages.entries()) {
-            const node = nodeMaker(
+            const node: InputTextNode = nodeMaker(
               message,
               hashtagFromSenderType(senderType) || configValues.hashtag
             );
-            await createBlock({
-              node,
-              parentUid,
-              order: startingOrder(parentUid, window.roamAlphaAPI) + i,
-            });
+
+            const existingBlock = await getCreateTimeByBlockUid(
+              `ptr-${message.id}`
+            );
+
+            if (!existingBlock) {
+              await createBlock({
+                node,
+                parentUid,
+                order: startingOrder(parentUid, window.roamAlphaAPI) + i,
+              });
+            }
+
             await axios.patch(
               `${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`,
               { status: "published" }

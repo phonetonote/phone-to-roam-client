@@ -8,7 +8,7 @@ import {
   HASHTAG_KEY,
   PARENT_BLOCK_KEY,
 } from "./constants";
-import { getTreeByPageName, TreeNode } from "roam-client";
+import { getTreeByPageName } from "roam-client";
 
 const getHashtag = (): string => {
   return getSettingValueFromTree({

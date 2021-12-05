@@ -1,4 +1,4 @@
-import { TextNode } from "roam-client";
+import { InputTextNode, TextNode } from "roam-client";
 import { LINK_KEYS } from "./constants";
 
 type LinkKey = typeof LINK_KEYS[number];
@@ -20,7 +20,7 @@ export type Message = {
   sender_type: string;
   created_at: string;
 };
-export const nodeMaker = (message: Message, hashtag: string) => {
+export const nodeMaker = (message: Message, hashtag: string): InputTextNode => {
   const children: TextNode[] = [];
   const attachment = message?.attachments[0];
   let text = message["text"];
@@ -60,5 +60,5 @@ export const nodeMaker = (message: Message, hashtag: string) => {
     text = `${text} #${hashtag}`;
   }
 
-  return { text: `${text}`, children: children };
+  return { text: `${text}`, children: children, uid: `ptr-${message.id}` };
 };

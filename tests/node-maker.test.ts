@@ -30,6 +30,17 @@ test("trims the text and adds the tag", () => {
   expect(node.children).toEqual([]);
 });
 
+test("creates a node with a ptr derived UUID", () => {
+  const id = "123";
+  const message = {
+    ...baseMessage,
+    id,
+  };
+
+  const node = nodeMaker(message, hashtag);
+  expect(node.uid).toEqual(`ptr-${id}`);
+});
+
 test("renders image attachments in the body", () => {
   const message = {
     ...baseMessage,
