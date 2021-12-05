@@ -7,12 +7,12 @@ type Attachment = {
   [linkKey in LinkKey]: string;
 } & {
   media_type: string;
-  image_url: string;
-  url: string;
+  image_url?: string;
+  url?: string;
 };
 
 export type Message = {
-  type: string;
+  id: string;
   body: string;
   message: string;
   text: string;

@@ -9,7 +9,6 @@ import {
   PARENT_BLOCK_KEY,
 } from "./constants";
 import { getTreeByPageName, TreeNode } from "roam-client";
-import Bugsnag from "@bugsnag/js";
 
 const getHashtag = (): string => {
   return getSettingValueFromTree({
