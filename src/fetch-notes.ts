@@ -26,7 +26,7 @@ export const fetchNotes = async () => {
         const message: Message = messages[i];
         await axios.patch(
           `${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`,
-          { status: "publishing" }
+          { status: "syncing" }
         );
       }
 
@@ -62,7 +62,7 @@ export const fetchNotes = async () => {
 
             await axios.patch(
               `${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`,
-              { status: "published" }
+              { status: "synced" }
             );
           }
         }
