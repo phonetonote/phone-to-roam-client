@@ -30,7 +30,7 @@ export const nodeMaker = (
   hashtag: string
 ): InputTextNode => {
   const children: TextNode[] = [];
-  const attachment = feedItem?.attachments[0];
+  const attachment = feedItem?.attachments?.[0];
 
   let text = feedItem?.content_text ?? "";
 
