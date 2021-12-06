@@ -1,52 +1,63 @@
 import { InputTextNode, TextNode } from "roam-client";
-import { LINK_KEYS } from "./constants";
 
-type LinkKey = typeof LINK_KEYS[number];
+const FEED_LINK_KEYS = [
+  "title",
+  "_ptr_open_graph_description",
+  "_ptr_open_graph_site_name",
+  "_ptr_open_graph_type",
+] as const;
+type FeedLinkKey = typeof FEED_LINK_KEYS[number];
 
-type Attachment = {
-  [linkKey in LinkKey]: string;
+type FeedAttachment = {
+  [feedLinkKey in FeedLinkKey]: string;
 } & {
-  media_type: string;
-  image_url?: string;
+  _ptr_media_type: string;
+  _ptr_open_graph_image_url?: string;
   url?: string;
 };
 
-export type Message = {
+export type FeedItem = {
   id: string;
-  body: string;
-  message: string;
-  text: string;
-  attachments: Attachment[];
-  sender_type: string;
-  created_at: string;
+  date_published: string;
+  url: string;
+  content_text: string;
+  attachments: FeedAttachment[];
+  _ptr_sender_type: string;
 };
-export const nodeMaker = (message: Message, hashtag: string): InputTextNode => {
-  const children: TextNode[] = [];
-  const attachment = message?.attachments[0];
-  let text = message["text"];
 
-  if (attachment?.media_type === "link") {
-    if (attachment.image_url && attachment.image_url.length > 0) {
+export const nodeMaker = (
+  feedItem: FeedItem,
+  hashtag: string
+): InputTextNode => {
+  const children: TextNode[] = [];
+  const attachment = feedItem?.attachments[0];
+
+  let text = feedItem?.content_text ?? "";
+
+  if (attachment?._ptr_media_type === "link") {
+    if (attachment?._ptr_open_graph_image_url?.length ?? 0 > 0) {
       children.push({
-        text: `![](${attachment["image_url"]})`,
+        text: `![](${attachment["_ptr_open_graph_image_url"]})`,
         children: [],
       });
     }
 
-    LINK_KEYS.forEach((k: LinkKey) => {
+    FEED_LINK_KEYS.forEach((k: FeedLinkKey) => {
       const v = attachment[k];
       if (v?.length > 0) {
         children.push({
-          text: `${k.replace(/_/g, " ")}:: ${v.trim()}`,
+          text: `${k.replace("_ptr_", "").replace(/_/g, " ")}:: ${v.trim()}`,
           children: [],
         });
       }
     });
-  } else if (attachment?.media_type === "image") {
+  } else if (attachment?._ptr_media_type === "image") {
     text = `![](${attachment.url})`;
-  } else if (attachment?.media_type === "audio") {
+  } else if (attachment?._ptr_media_type === "audio") {
     const title =
-      message.body?.trim()?.length > 0 ? message.body : "Audio Recording";
+      feedItem.content_text?.trim()?.length > 0
+        ? feedItem.content_text
+        : "Audio Recording";
     text = `[${title}](${attachment.url})`;
   }
 
@@ -60,5 +71,5 @@ export const nodeMaker = (message: Message, hashtag: string): InputTextNode => {
     text = `${text} #${hashtag}`;
   }
 
-  return { text: `${text}`, children: children, uid: `ptr-${message.id}` };
+  return { text: `${text}`, children: children, uid: `ptr-${feedItem.id}` };
 };

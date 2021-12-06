@@ -1,13 +1,13 @@
 import { toRoamDate } from "roam-client";
-import { Message } from "./node-maker";
+import { FeedItem } from "./node-maker";
 
-export const reduceMessages = (
-  obj: Record<string, Record<string, Message[]>>,
-  message: Message
+export const reduceFeedItems = (
+  obj: Record<string, Record<string, FeedItem[]>>,
+  feedItem: FeedItem
 ) => {
-  const date = new Date(message["created_at"]),
+  const date = new Date(feedItem.date_published),
     pageName = toRoamDate(date),
-    senderType = message["sender_type"];
+    senderType = feedItem._ptr_sender_type;
 
   if (!obj.hasOwnProperty(pageName)) {
     obj[pageName] = {};
@@ -17,6 +17,6 @@ export const reduceMessages = (
     obj[pageName][senderType] = [];
   }
 
-  obj[pageName][senderType].push(message);
+  obj[pageName][senderType].push(feedItem);
   return obj;
 };

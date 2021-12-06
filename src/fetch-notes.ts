@@ -6,50 +6,50 @@ import {
   InputTextNode,
   getCreateTimeByBlockUid,
 } from "roam-client";
-import { Message, nodeMaker } from "./node-maker";
+import { FeedItem, nodeMaker } from "./node-maker";
 import Bugsnag from "@bugsnag/js";
 import {
   parentBlockFromSenderType,
   hashtagFromSenderType,
 } from "./entry-helpers";
-import { reduceMessages } from "./reduce-messages";
+import { reduceFeedItems } from "./reduce-messages";
 import { startingOrder } from "./starting-order";
 import { configValues } from "./configure";
 
 export const roamKey = document.getElementById(SCRIPT_ID)?.dataset.roam_key;
 
 export const fetchNotes = async () => {
-  axios(`${SERVER_URL}/messages.json?roam_key=${roamKey}`)
+  axios(`${SERVER_URL}/feed.json?roam_key=${roamKey}`)
     .then(async (res) => {
-      const messages: Message[] = res.data;
-      for (var i = 0; i < messages.length; i++) {
-        const message: Message = messages[i];
+      const feedItems: FeedItem[] = res.data["items"];
+      for (var i = 0; i < feedItems.length; i++) {
+        const feedItem: FeedItem = feedItems[i];
         await axios.patch(
-          `${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`,
+          `${SERVER_URL}/feed/${feedItem.id}.json?roam_key=${roamKey}`,
           { status: "syncing" }
         );
       }
 
-      const messageMap = messages.reduce(reduceMessages, {});
+      const messageMap = feedItems.reduce(reduceFeedItems, {});
 
       for (const pageName in messageMap) {
         for (const senderType in messageMap[pageName]) {
-          const messages: Message[] = messageMap[pageName][senderType];
-          const date = new Date(messages[0]["created_at"]),
+          const feedItems: FeedItem[] = messageMap[pageName][senderType];
+          const date = new Date(feedItems[0].date_published),
             parentUid = findOrCreateParentUid(
               date,
               parentBlockFromSenderType(senderType),
               window.roamAlphaAPI,
               createBlock
             );
-          for (const [i, message] of messages.entries()) {
+          for (const [i, feedItem] of feedItems.entries()) {
             const node: InputTextNode = nodeMaker(
-              message,
+              feedItem,
               hashtagFromSenderType(senderType) || configValues.hashtag
             );
 
             const existingBlock = await getCreateTimeByBlockUid(
-              `ptr-${message.id}`
+              `ptr-${feedItem.id}`
             );
 
             if (!existingBlock) {
@@ -61,7 +61,7 @@ export const fetchNotes = async () => {
             }
 
             await axios.patch(
-              `${SERVER_URL}/messages/${message.id}.json?roam_key=${roamKey}`,
+              `${SERVER_URL}/feed/${feedItem.id}.json?roam_key=${roamKey}`,
               { status: "synced" }
             );
           }

@@ -1,13 +1,13 @@
-import { reduceMessages } from "../src/reduce-messages";
-import { baseMessage } from "./node-maker.test";
+import { reduceFeedItems } from "../src/reduce-messages";
+import { baseFeedItem } from "./node-maker.test";
 
 test("reduces by date", () => {
   const data = [
-    { ...baseMessage, created_at: "2020-06-10" },
-    { ...baseMessage, created_at: "2020-06-10" },
-    { ...baseMessage, created_at: "2020-07-20" },
+    { ...baseFeedItem, date_published: "2020-06-10" },
+    { ...baseFeedItem, date_published: "2020-06-10" },
+    { ...baseFeedItem, date_published: "2020-07-20" },
   ];
 
-  const results = data.reduce(reduceMessages, {});
+  const results = data.reduce(reduceFeedItems, {});
   expect(Object.keys(results).length).toEqual(2);
 });
