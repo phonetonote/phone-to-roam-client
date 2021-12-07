@@ -21,7 +21,7 @@ export type FeedItem = {
   date_published: string;
   url: string;
   content_text: string;
-  attachments: FeedAttachment[];
+  attachments?: FeedAttachment[];
   _ptr_sender_type: string;
 };
 
