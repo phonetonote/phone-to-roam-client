@@ -6,7 +6,6 @@ import {
   InputTextNode,
   getCreateTimeByBlockUid,
 } from "roam-client";
-import { FeedItem, nodeMaker } from "./node-maker";
 import Bugsnag from "@bugsnag/js";
 import {
   parentBlockFromSenderType,
@@ -15,6 +14,7 @@ import {
 import { reduceFeedItems } from "./reduce-messages";
 import { startingOrder } from "./starting-order";
 import { configValues } from "./configure";
+import { itemToNode, FeedItem } from "ptn-helpers";
 
 export const roamKey = document.getElementById(SCRIPT_ID)?.dataset.roam_key;
 
@@ -43,13 +43,13 @@ export const fetchNotes = async () => {
               createBlock
             );
           for (const [i, feedItem] of feedItems.entries()) {
-            const node: InputTextNode = nodeMaker(
+            const node: InputTextNode = itemToNode(
               feedItem,
               hashtagFromSenderType(senderType) || configValues.hashtag
             );
 
             const existingBlock = await getCreateTimeByBlockUid(
-              `ptr-${feedItem.id}`
+              `${feedItem.id}`
             );
 
             if (!existingBlock) {

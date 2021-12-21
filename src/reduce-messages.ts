@@ -1,5 +1,5 @@
 import { toRoamDate } from "roam-client";
-import { FeedItem } from "./node-maker";
+import { FeedItem } from "ptn-helpers";
 
 export const reduceFeedItems = (
   obj: Record<string, Record<string, FeedItem[]>>,
