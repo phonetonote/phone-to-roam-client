@@ -32,8 +32,8 @@ export const fetchNotes = async () => {
 
       const messageMap = feedItems.reduce(reduceFeedItems, {});
 
-      for (const pageName in messageMap) {
-        for (const senderType in messageMap[pageName]) {
+      for (const pageName of Object.keys(messageMap)) {
+        for (const senderType of Object.keys(messageMap[pageName])) {
           const feedItems: FeedItem[] = messageMap[pageName][senderType];
           const date = new Date(feedItems[0].date_published),
             parentUid = findOrCreateParentUid(
