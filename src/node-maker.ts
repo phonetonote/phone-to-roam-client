@@ -25,6 +25,9 @@ export type FeedItem = {
   _ptr_sender_type: string;
 };
 
+const generateUuid = (id: string): string =>
+  id.indexOf("ptr-") === 0 ? id : `ptr-${id}`;
+
 export const nodeMaker = (
   feedItem: FeedItem,
   hashtag: string
@@ -64,12 +67,16 @@ export const nodeMaker = (
   text = `${text.trim()}`;
   const validHashtag =
     hashtag && typeof hashtag === "string" && hashtag.length > 0;
-  const existingTags = /#\w+toroam/;
+  const existingTags = /#\w+to(roam|note)/;
   const needsNewTag = !!!text.match(existingTags)?.length;
 
   if (validHashtag && needsNewTag) {
     text = `${text} #${hashtag}`;
   }
 
-  return { text: `${text}`, children: children, uid: `ptr-${feedItem.id}` };
+  return {
+    text: `${text}`,
+    children: children,
+    uid: `${generateUuid(feedItem.id)}`,
+  };
 };
