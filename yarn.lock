@@ -10267,10 +10267,10 @@ psl@^1.1.28, psl@^1.1.33:
   resolved "https://registry.yarnpkg.com/psl/-/psl-1.8.0.tgz#9326f8bcfb013adcc005fdff056acce020e51c24"
   integrity sha512-RIdOzyoavK+hA18OGGWDqUTsCLhtA7IcZ/6NCs4fFJaHBDab+pDDmDIByWFRQJq2Cd7r1OoQxBGKOaztq+hjIQ==
 
-ptn-helpers@0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/ptn-helpers/-/ptn-helpers-0.0.5.tgz#3a1b5c92f8ce30f438d45df03cc6a51e5174270f"
-  integrity sha512-nKpc80Ws4lLBycazJ/E1iXlDxbP0Kifp+kSm3FVjgwgaCau+Pnp6sTFFKep6J5qg1hpRU61XjcT6r3OwQmk+1w==
+ptn-helpers@0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/ptn-helpers/-/ptn-helpers-0.0.6.tgz#5b11712a617392a1e852c461ce333a68226a7b4a"
+  integrity sha512-bPIYylI5Ug2XjkgZxzgYiNBz+Yc2a0w2T/03Sij7tOr/FUffkcZxlkbFOrocwGW0HGp6HfsvRkBhi/deJM3WQw==
 
 public-encrypt@^4.0.0:
   version "4.0.3"
