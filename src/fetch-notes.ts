@@ -49,7 +49,7 @@ export const fetchNotes = async () => {
             );
 
             const existingBlock =
-              node?.uid && (await getCreateTimeByBlockUid(`ptn${node.uid}`));
+              node?.uid && (await getCreateTimeByBlockUid(`${node.uid}`));
 
             if (!node.uid || !existingBlock) {
               await createBlock({
