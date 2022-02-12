@@ -856,14 +856,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.10.4"
 
-"@babel/plugin-transform-react-jsx-development@^7.12.1":
-  "integrity" "sha512-BPjYV86SVuOaudFhsJR1zjgxxOhJDt6JHNoD48DxWEIxUCAMjV1ys6DYw4SDYZh0b1QsS2vfIA9t/ZsQGsDOUQ=="
-  "resolved" "https://registry.npmjs.org/@babel/plugin-transform-react-jsx-development/-/plugin-transform-react-jsx-development-7.12.17.tgz"
-  "version" "7.12.17"
-  dependencies:
-    "@babel/plugin-transform-react-jsx" "^7.12.17"
-
-"@babel/plugin-transform-react-jsx-development@^7.12.17":
+"@babel/plugin-transform-react-jsx-development@^7.12.1", "@babel/plugin-transform-react-jsx-development@^7.12.17":
   "integrity" "sha512-BPjYV86SVuOaudFhsJR1zjgxxOhJDt6JHNoD48DxWEIxUCAMjV1ys6DYw4SDYZh0b1QsS2vfIA9t/ZsQGsDOUQ=="
   "resolved" "https://registry.npmjs.org/@babel/plugin-transform-react-jsx-development/-/plugin-transform-react-jsx-development-7.12.17.tgz"
   "version" "7.12.17"
@@ -1258,24 +1251,7 @@
   "resolved" "https://registry.npmjs.org/@blueprintjs/colors/-/colors-1.0.0.tgz"
   "version" "1.0.0"
 
-"@blueprintjs/core@^3.42.0", "@blueprintjs/core@^3.44.0":
-  "integrity" "sha512-QjRa4LvygTJn5v75O1bvKQtxcs9u2sl2CXoQ3Hd2KLQwzAz8kongWyc2xOw/wiFE4gRyRZQK44c43bEPkoeKhA=="
-  "resolved" "https://registry.npmjs.org/@blueprintjs/core/-/core-3.44.0.tgz"
-  "version" "3.44.0"
-  dependencies:
-    "@blueprintjs/icons" "^3.26.0"
-    "@types/dom4" "^2.0.1"
-    "classnames" "^2.2"
-    "dom4" "^2.1.5"
-    "normalize.css" "^8.0.1"
-    "popper.js" "^1.16.1"
-    "react-lifecycles-compat" "^3.0.4"
-    "react-popper" "^1.3.7"
-    "react-transition-group" "^2.9.0"
-    "resize-observer-polyfill" "^1.5.1"
-    "tslib" "~1.13.0"
-
-"@blueprintjs/core@^3.44.2", "@blueprintjs/core@^3.48.0":
+"@blueprintjs/core@^3.42.0", "@blueprintjs/core@^3.44.2", "@blueprintjs/core@^3.48.0":
   "integrity" "sha512-tuAL3dZrNaTq36RRy6O86wjmkiLt8LwHkleZ1zUcn/DC3cXsM3dSsRpV3f662bcEiAXMPeGemSC3tqv6uZCeLg=="
   "resolved" "https://registry.npmjs.org/@blueprintjs/core/-/core-3.48.0.tgz"
   "version" "3.48.0"
@@ -1304,14 +1280,6 @@
     "react-lifecycles-compat" "^3.0.4"
     "tslib" "~1.13.0"
 
-"@blueprintjs/icons@^3.26.0":
-  "integrity" "sha512-1+yhYH1Fjj5qGx8drZUL2L1R42MiN0WVHTTKYqGEV9TAzhvFHCSZgALD7WNQa+FEibw/8B4U+79IRgUPJNEjow=="
-  "resolved" "https://registry.npmjs.org/@blueprintjs/icons/-/icons-3.26.0.tgz"
-  "version" "3.26.0"
-  dependencies:
-    "classnames" "^2.2"
-    "tslib" "~1.13.0"
-
 "@blueprintjs/icons@^3.28.0":
   "integrity" "sha512-gDvvU2ljV4NXsY5ofKcs1ChXAgmqNp/DIMu2uJIJmXhSXfP6JDd4qbnbGMsP3FmLTaqQP3E9oBZqAG/FRB8VmQ=="
   "resolved" "https://registry.npmjs.org/@blueprintjs/icons/-/icons-3.28.0.tgz"
@@ -1320,16 +1288,7 @@
     "classnames" "^2.2"
     "tslib" "~1.13.0"
 
-"@blueprintjs/select@^3.16.0":
-  "integrity" "sha512-x6ocSC1sxRfKtVGDIzP83xSWQvikzcq7Vpl+HvlonbpDWu4a9Ybx8wV5AM2Twjwp0laF8XSSUWFh75iA/g6rsg=="
-  "resolved" "https://registry.npmjs.org/@blueprintjs/select/-/select-3.16.0.tgz"
-  "version" "3.16.0"
-  dependencies:
-    "@blueprintjs/core" "^3.44.0"
-    "classnames" "^2.2"
-    "tslib" "~1.13.0"
-
-"@blueprintjs/select@^3.16.2":
+"@blueprintjs/select@^3.16.0", "@blueprintjs/select@^3.16.2":
   "integrity" "sha512-38jvSt1zGOJuw6Vj3BrDn1ojZCI+U5UV8xEupGPTEVyszE7RwFoF8l1iDTLbiPwLV5DSOxTN0B6mxeSPX45OQw=="
   "resolved" "https://registry.npmjs.org/@blueprintjs/select/-/select-3.17.0.tgz"
   "version" "3.17.0"
@@ -6091,17 +6050,10 @@
   dependencies:
     "websocket-driver" ">=0.5.1"
 
-"faye-websocket@^0.11.3":
+"faye-websocket@^0.11.3", "faye-websocket@~0.11.1":
   "integrity" "sha512-CzbClwlXAuiRQAlUyfqPgvPoNKTckTPGfwZV4ZdAhVcP2lh9KUxJg2b5GkE7XbjKQ3YJnQ9z6D9ntLAlB+tP8g=="
   "resolved" "https://registry.npmjs.org/faye-websocket/-/faye-websocket-0.11.4.tgz"
   "version" "0.11.4"
-  dependencies:
-    "websocket-driver" ">=0.5.1"
-
-"faye-websocket@~0.11.1":
-  "integrity" "sha512-D2y4bovYpzziGgbHYtGCMjlJM36vAl/y+xUyn1C+FVx8szd1E+86KwVw6XvYSzOP8iMpm1X0I4xJD+QtUb36OA=="
-  "resolved" "https://registry.npmjs.org/faye-websocket/-/faye-websocket-0.11.3.tgz"
-  "version" "0.11.3"
   dependencies:
     "websocket-driver" ">=0.5.1"
 
@@ -7854,19 +7806,7 @@
     "jest-regex-util" "^26.0.0"
     "jest-snapshot" "^26.6.2"
 
-"jest-resolve@*":
-  "version" "26.6.0"
-  dependencies:
-    "@jest/types" "^26.6.0"
-    "chalk" "^4.0.0"
-    "graceful-fs" "^4.2.4"
-    "jest-pnp-resolver" "^1.2.2"
-    "jest-util" "^26.6.0"
-    "read-pkg-up" "^7.0.1"
-    "resolve" "^1.17.0"
-    "slash" "^3.0.0"
-
-"jest-resolve@^26.6.2":
+"jest-resolve@*", "jest-resolve@^26.6.2":
   "integrity" "sha512-sOxsZOq25mT1wRsfHcbtkInS+Ek7Q8jCHUB0ZUTP0tc/c41QHriU/NunqMfCUWsL4H3MHpvQD4QR9kSYhS7UvQ=="
   "resolved" "https://registry.npmjs.org/jest-resolve/-/jest-resolve-26.6.2.tgz"
   "version" "26.6.2"
@@ -10509,10 +10449,10 @@
   "resolved" "https://registry.npmjs.org/psl/-/psl-1.8.0.tgz"
   "version" "1.8.0"
 
-"ptn-helpers@0.0.7":
-  "integrity" "sha512-WAHLd82jatTwcq30oTvawFdHlZilkkqPCX5Rub+cDCcwi/dCz4JHES0lsYGh80U94Gp/2QkPHNGkx0NqDwob7A=="
-  "resolved" "https://registry.npmjs.org/ptn-helpers/-/ptn-helpers-0.0.7.tgz"
-  "version" "0.0.7"
+"ptn-helpers@^0.0.9":
+  "integrity" "sha512-CVbGQF6Y3HGEDEyk4+tJFCXWnigcVhxGSy1llm+KZ/Ge/vvYW0ouwijNCQpHkuEu1mHRbHXJ+LiLcpYjU9j3NA=="
+  "resolved" "https://registry.npmjs.org/ptn-helpers/-/ptn-helpers-0.0.9.tgz"
+  "version" "0.0.9"
 
 "public-encrypt@^4.0.0":
   "integrity" "sha512-zVpa8oKZSz5bTMTFClc1fQOnyyEzpl5ozpi1B5YcvBrdohMjH2rfsBtyXcuNuwjsDIXmBYlF2N5FlJYhR29t8Q=="
@@ -11588,17 +11528,10 @@
   "resolved" "https://registry.npmjs.org/select-hose/-/select-hose-2.0.0.tgz"
   "version" "2.0.0"
 
-"selfsigned@^1.10.11":
+"selfsigned@^1.10.11", "selfsigned@^1.10.7":
   "integrity" "sha512-aVmbPOfViZqOZPgRBT0+3u4yZFHpmnIghLMlAcb5/xhp5ZtB/RVnKhz5vl2M32CLXAqR4kha9zfhNg0Lf/sxKA=="
   "resolved" "https://registry.npmjs.org/selfsigned/-/selfsigned-1.10.11.tgz"
   "version" "1.10.11"
-  dependencies:
-    "node-forge" "^0.10.0"
-
-"selfsigned@^1.10.7":
-  "integrity" "sha512-2P4PtieJeEwVgTU9QEcwIRDQ/mXJLX8/+I3ur+Pg16nS8oNbrGxEso9NyYWy8NAmXiNl4dlAp5MwoNeCWzON4w=="
-  "resolved" "https://registry.npmjs.org/selfsigned/-/selfsigned-1.10.8.tgz"
-  "version" "1.10.8"
   dependencies:
     "node-forge" "^0.10.0"
 
@@ -11613,11 +11546,6 @@
   "version" "5.7.1"
 
 "semver@^5.4.1", "semver@^5.5.0", "semver@^5.5.1":
-  "integrity" "sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ=="
-  "resolved" "https://registry.npmjs.org/semver/-/semver-5.7.1.tgz"
-  "version" "5.7.1"
-
-"semver@^5.5.0":
   "integrity" "sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ=="
   "resolved" "https://registry.npmjs.org/semver/-/semver-5.7.1.tgz"
   "version" "5.7.1"
