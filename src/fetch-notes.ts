@@ -24,10 +24,10 @@ export const fetchNotes = async () => {
       const feedItems: FeedItem[] = res.data["items"];
       for (var i = 0; i < feedItems.length; i++) {
         const feedItem: FeedItem = feedItems[i];
-        await axios.patch(
-          `${SERVER_URL}/feed/${feedItem.id}.json?roam_key=${roamKey}`,
-          { status: "syncing" }
-        );
+        // await axios.patch(
+        //   `${SERVER_URL}/feed/${feedItem.id}.json?roam_key=${roamKey}`,
+        //   { status: "syncing" }
+        // );
       }
 
       const messageMap = feedItems.reduce(reduceFeedItems, {});
