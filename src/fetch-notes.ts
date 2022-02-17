@@ -48,11 +48,16 @@ export const fetchNotes = async () => {
               hashtagFromSenderType(senderType) || configValues.hashtag
             );
 
-            await createBlock({
-              node,
-              parentUid,
-              order: startingOrder(parentUid, window.roamAlphaAPI) + i,
-            });
+            const existingBlock =
+              node?.uid && (await getCreateTimeByBlockUid(`${node.uid}`));
+
+            if (!node.uid || !existingBlock) {
+              await createBlock({
+                node,
+                parentUid,
+                order: startingOrder(parentUid, window.roamAlphaAPI) + i,
+              });
+            }
 
             await axios.patch(
               `${SERVER_URL}/feed/${feedItem.id}.json?roam_key=${roamKey}`,

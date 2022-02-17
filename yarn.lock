@@ -10449,10 +10449,10 @@
   "resolved" "https://registry.npmjs.org/psl/-/psl-1.8.0.tgz"
   "version" "1.8.0"
 
-"ptn-helpers@^0.0.11":
-  "integrity" "sha512-5GXHKKk7ui8f3nx5FDsJ+AZZbOBt35euk+NwkXR5hlFrUx/vDV/a4OUtvA3zdWhDq5dgZR/Rviw15TBhbubaBw=="
-  "resolved" "https://registry.npmjs.org/ptn-helpers/-/ptn-helpers-0.0.11.tgz"
-  "version" "0.0.11"
+"ptn-helpers@^0.0.12":
+  "integrity" "sha512-Zx+TdHIsFEEHWrfdBOeIX+85uxzOL4OjgwAlMZGtId2A+VETikS6ZEz5RSuWJfC6u3Qz7IP4sLcnA5hSQxg8zQ=="
+  "resolved" "https://registry.npmjs.org/ptn-helpers/-/ptn-helpers-0.0.12.tgz"
+  "version" "0.0.12"
 
 "public-encrypt@^4.0.0":
   "integrity" "sha512-zVpa8oKZSz5bTMTFClc1fQOnyyEzpl5ozpi1B5YcvBrdohMjH2rfsBtyXcuNuwjsDIXmBYlF2N5FlJYhR29t8Q=="
