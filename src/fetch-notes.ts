@@ -52,11 +52,43 @@ export const fetchNotes = async () => {
               node?.uid && (await getCreateTimeByBlockUid(`${node.uid}`));
 
             if (!node.uid || !existingBlock) {
-              await createBlock({
+              const hasSmartBlockTemplate =
+                configValues.smartblockTemplate &&
+                configValues.smartblockTemplate.length > 0;
+
+              const orderOffset = hasSmartBlockTemplate ? i * 2 : i;
+
+              const blockIdFromPtnBlock = await createBlock({
                 node,
                 parentUid,
-                order: startingOrder(parentUid, window.roamAlphaAPI) + i,
+                order:
+                  startingOrder(parentUid, window.roamAlphaAPI) + orderOffset,
               });
+
+              if (hasSmartBlockTemplate) {
+                const { smartblockTemplate } = configValues;
+
+                let smartBlockId = window.roamAlphaAPI.util.generateUID();
+                window.roamAlphaAPI.createBlock({
+                  location: {
+                    "parent-uid": parentUid,
+                    order:
+                      startingOrder(parentUid, window.roamAlphaAPI) +
+                      orderOffset +
+                      1,
+                  },
+                  block: { string: "", uid: smartBlockId },
+                });
+
+                window.roamjs?.extension.smartblocks.triggerSmartblock({
+                  srcName: smartblockTemplate,
+                  targetUid: smartBlockId,
+                  variables: {
+                    feedItem: feedItem,
+                    roamBlockId: blockIdFromPtnBlock,
+                  },
+                });
+              }
             }
 
             await axios.patch(
