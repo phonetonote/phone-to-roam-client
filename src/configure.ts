@@ -39,9 +39,18 @@ const hashtagFromConfig = (): string => {
     : "";
 };
 
+const templateFromConfig = (): string => {
+  return getSettingValueFromTree({
+    key: "smartblock template",
+    defaultValue: "",
+    tree: getTreeByPageName(CONFIG),
+  });
+};
+
 export const configValues = {
   indexingEnabled: indexingEnabled(),
   hashtag: hashtagFromConfig(),
+  smartblockTemplate: templateFromConfig(),
 };
 
 export const inputTypes = [
@@ -60,6 +69,13 @@ fields = fields.concat([
     title: "enable_indexing",
     description:
       "((BETA FEATURE)) turn this on to allow us to start indexing your roam page titles for use in the helpful keyboard iOS app.",
+  },
+  {
+    type: "text",
+    title: "smartblock template",
+    description:
+      "((BETA FEATURE)) pass each phonetonote message to the smartblock of your choice",
+    defaultValue: "",
   },
   {
     type: "text",
