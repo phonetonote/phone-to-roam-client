@@ -3,7 +3,8 @@ import { SCRIPT_ID, SERVER_URL } from "./constants";
 import { parseRoamDate } from "roam-client";
 import Bugsnag from "@bugsnag/js";
 
-export const roamKey = document.getElementById(SCRIPT_ID)?.dataset.roam_key;
+const scriptData = document.getElementById(SCRIPT_ID)?.dataset;
+export const roamKey = scriptData?.ptn_key || scriptData?.roam_key;
 
 export const indexPages = async () => {
   // collect the page titles
