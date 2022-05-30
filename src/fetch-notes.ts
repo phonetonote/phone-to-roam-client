@@ -43,10 +43,9 @@ export const fetchNotes = async () => {
               createBlock
             );
           for (const [i, feedItem] of feedItems.entries()) {
-            const node: InputTextNode = itemToNode(
-              feedItem,
-              hashtagFromSenderType(senderType) || configValues.hashtag
-            );
+            const hashtag =
+              hashtagFromSenderType(senderType) || configValues.hashtag;
+            const node: InputTextNode = itemToNode(feedItem, hashtag);
 
             const existingBlock =
               node?.uid && (await getCreateTimeByBlockUid(`${node.uid}`));
@@ -79,6 +78,8 @@ export const fetchNotes = async () => {
                   variables: {
                     feedItem: feedItem,
                     rawText: node.text,
+                    hashtag: hashtag,
+                    senderType: senderType,
                   },
                 });
               } else {
