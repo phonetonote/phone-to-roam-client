@@ -58,13 +58,6 @@ export const fetchNotes = async () => {
 
               const orderOffset = hasSmartBlockTemplate ? i * 2 : i;
 
-              const blockIdFromPtnBlock = await createBlock({
-                node,
-                parentUid,
-                order:
-                  startingOrder(parentUid, window.roamAlphaAPI) + orderOffset,
-              });
-
               if (hasSmartBlockTemplate) {
                 const { smartblockTemplate } = configValues;
 
@@ -85,8 +78,14 @@ export const fetchNotes = async () => {
                   targetUid: smartBlockId,
                   variables: {
                     feedItem: feedItem,
-                    roamBlockId: blockIdFromPtnBlock,
                   },
+                });
+              } else {
+                await createBlock({
+                  node,
+                  parentUid,
+                  order:
+                    startingOrder(parentUid, window.roamAlphaAPI) + orderOffset,
                 });
               }
             }

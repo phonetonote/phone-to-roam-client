@@ -74,7 +74,7 @@ fields = fields.concat([
     type: "text",
     title: "smartblock template",
     description:
-      "((BETA FEATURE)) pass each phonetonote message to the smartblock of your choice",
+      "((BETA FEATURE)) pass each phonetonote message to the smartblock of your choice. use this to let smartblocks handle rendering your mobile notes for more customizability.",
     defaultValue: "",
   },
   {
