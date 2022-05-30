@@ -78,6 +78,7 @@ export const fetchNotes = async () => {
                   targetUid: smartBlockId,
                   variables: {
                     feedItem: feedItem,
+                    rawText: node.text,
                   },
                 });
               } else {
