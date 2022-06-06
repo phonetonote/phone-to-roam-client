@@ -19,12 +19,7 @@ const getHashtag = (): string => {
 };
 
 const indexingEnabled = (): boolean => {
-  const tree = getTreeByPageName(CONFIG);
-  if (tree && tree.length > 0) {
-    return tree.filter((obj) => obj.text === "enable_indexing").length > 0;
-  } else {
-    return false;
-  }
+  return false;
 };
 
 const hashtagFromConfig = (): string => {
@@ -64,12 +59,6 @@ export const inputTypes = [
 
 let fields: any[] = [];
 fields = fields.concat([
-  {
-    type: "flag",
-    title: "enable_indexing",
-    description:
-      "((BETA FEATURE)) turn this on to allow us to start indexing your roam page titles for use in the helpful keyboard iOS app.",
-  },
   {
     type: "text",
     title: "smartblock template",
