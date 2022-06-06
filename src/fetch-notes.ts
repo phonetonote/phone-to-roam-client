@@ -80,6 +80,9 @@ export const fetchNotes = async () => {
                     rawText: feedItem.content_text,
                     hashtag: hashtag,
                     senderType: senderType,
+                    attachmentText: feedItem.attachments
+                      ?.map((attachment) => attachment.title)
+                      .join(", "),
                   },
                 });
               } else {
