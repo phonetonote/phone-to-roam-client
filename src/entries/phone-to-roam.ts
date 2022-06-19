@@ -1,5 +1,4 @@
 import { fetchNotes, roamKey } from "../fetch-notes";
-import { indexPages } from "../index-pages";
 import { configure, configValues } from "../configure";
 import Bugsnag from "@bugsnag/js";
 
@@ -9,13 +8,7 @@ if (roamKey) {
 }
 
 configure();
-
 fetchNotes();
-
-if (configValues.indexingEnabled) {
-  indexPages();
-  window.setInterval(() => indexPages(), 1000 * 60 * 20);
-}
 
 document.addEventListener("click", (e: any) => {
   if (e?.target?.innerText?.toUpperCase() === "DAILY NOTES") {
