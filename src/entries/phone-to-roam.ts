@@ -16,4 +16,4 @@ document.addEventListener("click", (e: any) => {
   }
 });
 
-window.setInterval(() => fetchNotes(), 1000 * 20);
+window.setInterval(() => fetchNotes(), 1000 * 60);
