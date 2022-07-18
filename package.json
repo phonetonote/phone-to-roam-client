@@ -39,7 +39,8 @@
     "axios": "^0.21.2",
     "ptn-helpers": "^0.0.13",
     "roam-client": "^1.90",
-    "roamjs-components": "^0.68.2"
+    "roamjs-components": "^0.25",
+    "tslib": "^2.4.0"
   },
   "browserslist": {
     "production": [
