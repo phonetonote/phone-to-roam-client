@@ -4,6 +4,7 @@ import { findOrCreateParentUid } from "./find-or-create-parent-uid";
 import {
   createBlock,
   getCreateTimeByBlockUid,
+  getCurrentUserUid,
   InputTextNode,
 } from "roam-client";
 import Bugsnag from "@bugsnag/js";
@@ -17,9 +18,12 @@ import { configValues } from "./configure";
 import { itemToNode, FeedItem } from "ptn-helpers";
 
 export const roamKey = document.getElementById(SCRIPT_ID)?.dataset.roam_key;
+const roamId = getCurrentUserUid();
 
 export const fetchNotes = async () => {
-  axios(`${SERVER_URL}/feed.json?roam_key=${roamKey}`)
+  axios(
+    `${SERVER_URL}/feed.json?roam_key=${roamKey}&roam_id=${roamId}&sender_source=roam_script`
+  )
     .then(async (res) => {
       const feedItems: FeedItem[] = res.data["items"];
       for (var i = 0; i < feedItems.length; i++) {
@@ -72,17 +76,18 @@ export const fetchNotes = async () => {
                   block: { string: "", uid: smartBlockId },
                 });
 
-                window.roamjs?.extension.smartblocks.triggerSmartblock({
+                window?.roamjs?.extension?.smartblocks?.triggerSmartblock({
                   srcName: smartblockTemplate,
                   targetUid: smartBlockId,
                   variables: {
-                    feedItem: feedItem,
+                    feedItem: JSON.stringify(feedItem),
                     rawText: feedItem.content_text,
                     hashtag: hashtag,
                     senderType: senderType,
-                    attachmentText: feedItem.attachments
-                      ?.map((attachment) => attachment.title)
-                      .join(", "),
+                    attachmentText:
+                      feedItem.attachments
+                        ?.map((attachment) => attachment.title)
+                        .join(", ") ?? "",
                   },
                 });
               } else {
